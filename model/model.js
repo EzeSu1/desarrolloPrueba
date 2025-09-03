@@ -9,10 +9,10 @@ export class Usuario{
     }
 
     static crearId(){
-        if(!this.ultimoId){
-            this.ultimoId=1;
+        if(!this.ultimoId) {
+            this.ultimoId=1;        
         }
-        return this.ultimoId++;
+        return this.ultimoId++; 
     }
 }
 
@@ -54,26 +54,29 @@ export class Pedido{
         this.id=Pedido.crearId();
         this.comprador=comprador;
         this.items=items; 
-        //this.total= 
+        this.total=this.calcularTotal();
         this.moneda=moneda;
         this.direccionEntrega=direccionEntrega;
         this.estado=estado;
         this.fechaCreacion=new Date();
         this.historialEstado=[];
         if (this.historialEstado.length==0){
-            this.agregarCambioEstado(estado, comprador, "Creacion del pedido");
+            this.agregarCambioEstado(estado.PENDIENTE, comprador, "Creacion del pedido");
         }
         
         
     }
+
     static crearId(){
         if(!this.ultimoId){
             this.ultimoId=1;
         }
         return this.ultimoId++;
     }
+
     calcularTotal(){
-        return 0;
+        return this.items.reduce((acc, item) =>acc + item.subtotal(), 0);
+      
     }
 
     actualizarEstado(nuevoEstado, quien, motivo){
@@ -81,10 +84,12 @@ export class Pedido{
         this.agregarCambioEstado(nuevoEstado, quien, motivo);
        
     }
+
     agregarCambioEstado(nuevoEstado , quien, motivo){
         const cambioEstado= new CambioEstadoPedido(nuevoEstado, this, quien, motivo);
         this.historialEstado.push(cambioEstado);
     }
+
     validarStock(){
         return Boolean;
     }
@@ -92,14 +97,15 @@ export class Pedido{
 
 }
 
-export class ItemPedido{
+export class ItemPedido {
     constructor(producto, cantidad, precioUnitario){
         this.producto=producto;
         this.cantidad=cantidad;
         this.precioUnitario=precioUnitario;
     }
-    subtotal(){
-        return 0;
+
+    subtotal() {
+        return this.cantidad * this.precioUnitario;
     }
 }
 
@@ -116,20 +122,24 @@ export class Producto{
         this.categoria=[];
         this.activo=false;
     }
+
     estaDisponible(){
         return this.activo && this.stock>0;
     }
+    
 
     aumentarStock(cantidad){
         if (cantidad>0){
             this.stock+=cantidad;
         }
     }
+
     disminuirStock(cantidad){
         if (cantidad>0 && this.stock>=cantidad){
             this.stock-=cantidad;
         }   
     }
+
     activar(){
         this.activo=true;
     }
@@ -140,6 +150,7 @@ export class Categoria{
         this.nombre=nombre;
     }
 }
+
 export class Notificacion{
     constructor(usuarioDestino, mensaje){
         this.id=Notificacion.crearId();
@@ -149,13 +160,14 @@ export class Notificacion{
         this.fechaLeida=null;
         this.leida=false;
     }
+
     static crearId(){
         if(!this.ultimoId){
             this.ultimoId=1;
         }
         return this.ultimoId++;
     }
-
+    
     marcarComoLeida(){
         this.fechaLeida= new Date();
         this.leida=true;
@@ -166,11 +178,11 @@ export class FactoryNotificacion extends Notificacion{
     crearSegunEstado(estado){
         return "Notificacion segun estado: "+estado;
     }
+
     crearSegunPedido(pedido){
         const notificacion= new Notificacion(pedido.comprador, "Su pedido con id "+pedido.id+" ha cambiado de estado a "+pedido.estado);
         return notificacion;
     }
-
 }
 
 export class DireccionEntrega{
@@ -187,3 +199,13 @@ export class DireccionEntrega{
         this.lon=lon;
     }
 }
+
+const usuario1= new Usuario("Ezequiel", "dds@frba.utn.edu.ar", "1234", TipoUsuario.COMPRADOR);
+console.log("usuario:", usuario1);
+
+const usuario2= new Usuario("Pedro", "dds@frba.utn.edu.ar", "4321", TipoUsuario.COMPRADOR);
+console.log("usuario:", usuario2);
+
+
+// POST DATOS -> Router
+// DATOS -> Error Handler: Que hace?

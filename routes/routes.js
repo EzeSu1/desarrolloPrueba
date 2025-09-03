@@ -3,7 +3,7 @@ import { getHealth } from "../controller/controller.js"; // Cambia require por i
 
 const router = Router();
 
-router.get("/health", getHealth); 
+router.get("/health-check", getHealth); 
 
 
 export default router;
