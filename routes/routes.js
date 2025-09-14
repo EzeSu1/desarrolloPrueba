@@ -1,9 +1,17 @@
-import { Router } from "express";
-import { getHealth } from "../controller/controller.js"; // Cambia require por import
+import healthRoutes from "./healthRoutes.js";
+import userRoutes from "./usuariosRoutes.js";
+import pedidosRoutes from "./pedidosRoutes.js";
+import productoRoutes from "./productosRoutes.js";
+import direccionesRoutes from "./direccionesRoutes.js";
 
-const router = Router();
 
-router.get("/health-check", getHealth); 
+const routes = [
+    healthRoutes,
+    userRoutes,
+    pedidosRoutes,
+    productoRoutes,
+    direccionesRoutes,
+]
 
 
-export default router;
+export default routes
