@@ -1,18 +1,20 @@
 import  ProductosController from "../controllers/productosController.js"
 import express from "express"
+import {errorHandler} from "../middlewares/errorHandler.js";
 
-const router = express.Router()
 
-const pathProductos = "/productos"
+const router= express.Router()
 
-router.get(pathProductos + "/:id", (req, res) => {
-    ProductosController.obtenerProducto(req, res)
+router.route("/:id")
+    .get((req, res, next) => {
+        ProductosController.obtenerProducto(req, res, next)
+    })
+
+router.route("/")
+    .post((req, res, next) => {
+        ProductosController.crearProducto(req, res, next)
 })
 
-router.post(pathProductos, (req, res) => {
-    ProductosController.crearProducto(req, res)
-})
+router.use(errorHandler)
 
-
-
-export default router
+export default router;

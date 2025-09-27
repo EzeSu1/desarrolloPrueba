@@ -1,22 +1,19 @@
-class PedidosRepository {
+import path from "node:path";
+import fs from "node:fs/promises";
+import ProductosMapper from "../mappers/productosMapper.js";
+import PedidosMapper from "../mappers/pedidosMapper.js";
+import {Repository} from "./repository.js";
+
+class PedidosRepository extends Repository{
     constructor() {
-        this.pedidos = []
-        this.ultimo_id = 1
-    }
-
-    findById(id) {
-        return this.pedidos.find(pedido => pedido.id === id)
-    }
-
-    save(pedido) {
-        pedido.id = this.ultimo_id++
-        this.pedidos.push(pedido)
-
-        return pedido
+        super("pedidos.json", (data)=>PedidosMapper.mapToPedidosObject(data));
     }
 
     findByUserId(userId) {
-        return this.pedidos.filter(p => p.comprador.getId() === userId)
+        return this.getAll()
+            .then(pedidos =>{
+                return pedidos.filter(p => p.comprador.id === Number(userId))
+            })
     }
 
     deleteById(id) {
@@ -26,6 +23,25 @@ class PedidosRepository {
             return pedidoEliminado
         }
         return null
+    }
+
+    update(idPedido, usuario, nuevoEstado, motivo,) {
+        return this.getAll()
+            .then(pedidos =>{
+                const indice = pedidos.findIndex(p => p.id === Number(idPedido));
+                if (indice === -1) {
+                    return null
+                }
+                const pedido = pedidos[indice]
+                pedido.actualizarEstado(nuevoEstado, usuario, motivo)
+                pedidos[indice] = pedido
+
+                return fs.writeFile(
+                    this.filePath,
+                    JSON.stringify(pedidos)
+                ).then(() => pedido);
+            })
+        //TODO
     }
 }
 

@@ -1,18 +1,17 @@
-class ProductosRepository {
+import path from "node:path";
+import fs from "node:fs/promises";
+
+import ProductosMapper from "../mappers/productosMapper.js";
+import {Repository} from "./repository.js";
+
+
+class ProductosRepository  extends Repository{
     constructor() {
-        this.productos = []
-        this.ultimo_id = 1;
+        super("productos.json" ,(data) => ProductosMapper.mapToProductosObject(data));
     }
 
-    findById(id) {
-        return this.productos.find(producto => producto.id === id)
-    }
 
-    save(producto) {
-        producto.id = this.ultimo_id++
-        this.productos.push(producto)
-        return producto
-    }
 }
+
 
 export default ProductosRepository

@@ -1,20 +1,17 @@
 
+import UsuariosMapper from "../mappers/usuariosMapper.js";
+import {Repository} from "./repository.js";
 
-class UsuariosRepository {
+class UsuariosRepository extends Repository{
     constructor() {
-        this.usuarios = []
-        this.ultimo_id = 1;
+        super("usuarios.json" ,(data) => UsuariosMapper.mapToUsuariosObject(data));
     }
 
-    findById(id) {
-        return this.usuarios.find(usuario => usuario.id === id)
-    }
 
-    save(usuario) {
-        usuario.id = this.ultimo_id++
-        this.usuarios.push(usuario)
-        return usuario
-    }
 }
 
+
+
 export default UsuariosRepository
+
+

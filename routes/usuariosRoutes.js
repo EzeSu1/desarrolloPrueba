@@ -1,25 +1,36 @@
 import UsuariosController from "../controllers/usuariosController.js"
 import express from "express"
+import {errorHandler} from "../middlewares/errorHandler.js";
+
+
 
 const router = express.Router()
 
-const pathUsuarios = "/usuarios"
 
-router.get(pathUsuarios + "/:id", (req, res) => {
-    UsuariosController.obtenerUsuario(req, res)
-})
 
-router.get(pathUsuarios + "/:id/pedidos", (req, res) => {
-    UsuariosController.obtenerPedidosUsuario(req, res)
-})
+router.route("/:id")
+    .get((req, res, next)=>{
+        UsuariosController.obtenerUsuario(req, res, next)
+    })
 
-router.post(pathUsuarios, (req, res) => {
-    UsuariosController.crearUsuario(req, res)
-})
 
-router.put(pathUsuarios + "/:id", (req, res) => {
-    UsuariosController.actualizarUsuario(req, res)
+router.route("/:id/notificaciones")
+    .get((req, res, next)=>{
+        UsuariosController.obtenerNotificacionesUsuario(req, res, next)
+    })
 
-})
+router.route("/:id/pedidos")
+    .get((req, res, next)=>{
+        UsuariosController.obtenerPedidosUsuario(req, res, next)
+    })
+
+router.route("/")
+    .post((req, res, next)=>{
+        UsuariosController.crearUsuario(req, res, next)
+    })
+
+
+
+router.use(errorHandler)
 
 export default router

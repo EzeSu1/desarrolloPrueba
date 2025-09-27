@@ -12,6 +12,10 @@ export class Notificacion {
 
 
 
+    getUsuarioDestinoId() {
+        return this.usuario_destino.getId()
+    }
+
     marcarComoLeida() {
         this.leida = true
         this.fecha_leida = new Date()

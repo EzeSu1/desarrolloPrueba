@@ -11,10 +11,6 @@ export class ItemPedido {
         return this.cantidad * this.precio_unitario
     }
 
-    hayStockDisponible() {
-        return this.producto.estaDisponible(this.cantidad)
-    }
-
     nombreProducto(){
         return this.producto.titulo
     }

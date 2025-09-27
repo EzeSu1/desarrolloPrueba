@@ -1,66 +1,67 @@
-import PedidosService from "../services/pedidosService.js"
-import { pedidoSchema, idTransform } from "./validadores.js"
-import usuariosService from "../services/usuariosService.js";
-import productoService from "../services/productoService.js";
+import { idTransform, validarIdParam, showBodyErrors } from "./validadores.js"
+import { pedidoSchema } from "./schemas/pedidoSchema.js";
+import { cambioEstadoSchema } from "./schemas/cambioEstadoSchema.js";
+import PedidosDTOs from "../DTOs/pedidosDTOs.js";
+import PedidosService from "../services/pedidosService.js";
 
 
-class PedidosController {
-    obtenerPedido(req, res) {
-        const resultId = idTransform.safeParse(req.params.id)
 
-        if (resultId.error) {
-            res.status(400).json(resultId.error.issues)
-            return
-        }
+export class PedidosController {
 
-        const pedido = PedidosService.obtenerPedido(resultId.data);
+    obtenerPedido(req, res, next) {
+        const pedido_id = validarIdParam(req, res, next)
 
-        if (!pedido) {
-            res.status(404).json({error: "Pedido no encontrado con ese ID"})
-            return
-        }
-
-        res.status(200).json(pedido)
+        PedidosService.obtenerPedido(pedido_id)
+            .then(pedido => res.status(200).json(PedidosDTOs.pedidoToDTO(pedido)))
+            .catch(next)
     }
 
-    crearPedido(req, res) {
-        const resultBody = pedidoSchema.safeParse(req.body)
+    crearPedido(req, res,next) {
+        const result_body = pedidoSchema.safeParse(req.body)
 
-        if (!resultBody.success) {
-            res.status(400).json(resultBody.error.issues)
-            return
+        if (!result_body.success) {
+            return showBodyErrors(req, res, result_body)
         }
 
-        const pedidoCreado = PedidosService.crearPedido(resultBody.data);
+        PedidosService.crearPedido(result_body.data)
+            .then(pedidoCreado=> res.status(201).json(PedidosDTOs.pedidoToDTO(pedidoCreado)))
+            .catch(next)
+    }
 
-        if (!pedidoCreado) {
-            res.status(500).json({error: "Error al crear el pedido"})
-            return
+    actualizarPedido(req, res, next) {
+        const result_id = idTransform.safeParse(req.params.id)
+        const result_body = cambioEstadoSchema.safeParse(req.body)
+
+        if (!result_body.success) {
+            return showBodyErrors(result_body)
+        }
+        else if (result_id.error) {
+            return res.status(400).json(result_body.error.issues)
         }
 
-        res.status(201).json(pedidoCreado)
+        const id_pedido = result_id.data
+        const nuevo_estado_json = result_body.data
+        PedidosService.actualizarPedido(id_pedido, nuevo_estado_json)
+            .then(pedidoActualizado => res.status(200).json(PedidosDTOs.pedidoActualizadoOutPutDTO(pedidoActualizado)))
+            .catch(next)
     }
 
-    /// probar
-    actualizarPedido(req, res) {
-        const resultId = idTransform.safeParse(req.params.id)
-        const resultBody = pedidoSchema.safeParse(req.body)
+    eliminarPedido(req, res, next) {
+        const pedido_id = validarIdParam(req, res)
 
-        if (!resultBody.success || resultId.error) {
-            res.status(400).json(resultBody.error.issues)
-            return
+        PedidosService.eliminarPedido(pedido_id)
+            .then(pedidoEliminado => res.status(200).json(PedidosDTOs.pedidoToDTO(pedidoEliminado)))
+            .catch(next)
+    }
+
+    /*
+    static instance() {
+        if (!PedidosController.singleton) {
+            PedidosController.singleton = new PedidosController();
         }
-
-        const idPedido = resultId.data
-        const nuevoPedido = resultBody.data
-        PedidosService.actualizarPedido()
+        return PedidosController.singleton;
     }
-
-    eliminarPedido(req, res) {
-        PedidosService.eliminarPedido()
-    }
-
-
+    */
 }
 
 export default new PedidosController();

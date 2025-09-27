@@ -1,6 +1,3 @@
-import { Moneda } from "../enums/moneda.js"
-import { Usuario } from "./usuario.js"
-
 export class Producto {
     constructor(vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos) {
         this.id = null
@@ -12,10 +9,13 @@ export class Producto {
         this.moneda = moneda
         this.stock = stock
         this.fotos = fotos
-        this.activo = true //Activo, visible o publico... cual suena peor?
+        this.activo = true
     }
 
 
+    getIdVendedor() {
+        return this.vendedor.getId()
+    }
 
     getPrecio() {
         return this.precio
@@ -25,9 +25,7 @@ export class Producto {
         this.precio = nuevoPrecio
     }
 
-    // revisar
     setActivo(estado) {
-
         this.activo = estado
     }
 

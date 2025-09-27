@@ -1,72 +1,59 @@
 import UsuariosService from "../services/usuariosService.js";
-import {  usuarioSchema2,idTransform } from "./validadores.js"  //idTransform falta importarlo,
+import { validarIdParam, showBodyErrors } from "./validadores.js"
+import { usuarioSchema } from "./schemas/usuarioSchema.js";
+import UsuariosDTOs from "../DTOs/usuariosDTO.js";
+import PedidosDTOs from "../DTOs/pedidosDTOs.js";
+import NotificacionesDTOs from "../DTOs/notificacionesDTOs.js";
 
 class UsuariosController {
-    constructor() {
-        this.usuariosService = UsuariosService;
+
+    obtenerUsuario(req, res, next) {
+        const usuario_id = validarIdParam(req, res)
+
+        UsuariosService.obtenerUsuario(usuario_id)
+            .then(usuario => res.status(200).json(UsuariosDTOs.usuarioToDTO(usuario)))
+            .catch(next)
+
     }
 
-    obtenerUsuario(req, res) {
-        const resultId = idTransform.safeParse(req.params.id)
+    obtenerNotificacionesUsuario(req, res, next) {
+        const usuario_id = validarIdParam(req, res)
 
-        if(resultId.error) {
-            res.status(400).json(resultId.error.issues)
-            return
-        }
-
-        const id = resultId.data
-        const usuario = this.usuariosService.obtenerUsuario(id);
-
-        if(!usuario) {
-            res.status(404).json({ error: "Usuario no encontrado con ese ID" })
-            return
-        }
-
-        res.status(200).json(usuario)
+        UsuariosService.obtenerNotificacionesUsuario(usuario_id)
+            .then(notificaciones => res.status(200).json(NotificacionesDTOs.notificacionesToDTO(notificaciones)))
+            .catch(next)
     }
 
-    obtenerPedidosUsuario(req, res) {
-        const resultId = idTransform.safeParse(req.params.id)
+    obtenerPedidosUsuario(req, res, next) {
+        const usuario_id = validarIdParam(req, res)
 
-        if(resultId.error) {
-            res.status(400).json(resultId.error.issues)
-            return
-        }
-
-        const id = resultId.data
-        const pedidos = this.usuariosService.obtenerPedidosUsuario(id);
-
-        if(!pedidos) {
-            res.status(404).json({ error: "El usuario no tiene pedidos" })
-            return
-        }
-
-        res.status(200).json(pedidos)
+        UsuariosService.obtenerPedidosUsuario(usuario_id)
+            .then(pedidos => res.status(200).json(PedidosDTOs.pedidosToDTO(pedidos)))
+            .catch(next)
     }
 
-    crearUsuario(req, res) {
+    crearUsuario(req, res, next) {
         const body = req.body
-        const resultBody = usuarioSchema2.safeParse(body)
+        const result_body = usuarioSchema.safeParse(body)
 
-        if(!resultBody.success) {
-            const errores = resultBody.error.issues.map(e => ({
-                path: e.path.join("."),
-                message: e.message
-            }));
-            res.status(400).json({ errores })
-            return
+        if (!result_body.success) {
+            return showBodyErrors(req, res, result_body)
         }
 
-        const usuarioCreado = this.usuariosService.crearUsuario(resultBody.data);
-
-        if(!usuarioCreado) {
-            res.status(500).json({ error: "Error al crear el usuario" })
-            return
-        }
-
-        res.status(201).json(usuarioCreado)
+        UsuariosService.crearUsuario(result_body.data)
+            .then(usuario_creado => res.status(201).json(UsuariosDTOs.usuarioToDTO(usuario_creado)))
+            .catch(next)
     }
+    /*
+    static instance() {
+        if (!UsuariosController.singleton) {
+            UsuariosController.singleton = new UsuariosController();
+        }
+        return UsuariosController.singleton;
+    }
+    */
 
 }
 
 export default new UsuariosController();
+

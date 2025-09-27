@@ -1,16 +1,19 @@
 import  HealthController from "../controllers/healthController.js"
+import {errorHandler} from "../middlewares/errorHandler.js"
 import express from "express"
+
 
 const router = express.Router()
 
 
-const pathHealth = "/health-check"
 
-router.get(pathHealth, (req, res) => {
-    HealthController.checkHealth(req, res)
+
+router.route("/")
+    .get((req, res) => {
+        HealthController.checkHealth(req, res)
 })
 
 
 // npm run start:development
-
+router.use(errorHandler)
 export default router

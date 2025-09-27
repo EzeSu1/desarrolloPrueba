@@ -1,24 +1,36 @@
 import  PedidosController from "../controllers/pedidosController.js"
 import express from "express"
+import {errorHandler} from "../middlewares/errorHandler.js";
+
 
 const router = express.Router()
 
-const pathPedidos = "/pedidos"
 
-router.get(pathPedidos + "/:id", (req, res) => {
-    PedidosController.obtenerPedido(req, res)
-})
+router.route("/")
+    .post((req, res, next) => {
+        PedidosController.crearPedido(req, res, next)
+    })
+    .delete((req, res, next) =>{
+        PedidosController.eliminarPedido(req, res, next)
+    })
 
-router.post(pathPedidos, (req, res) => {
-    PedidosController.crearPedido(req, res)
-})
 
-router.put(pathPedidos + "/:id", (req, res) => {
-    PedidosController.actualizarPedido(req, res)
-})
+router.route("/:id")
+    .get((req, res, next) => {
+    PedidosController.obtenerPedido(req, res, next)
+    })
+    .delete((req, res, next) =>{
+        PedidosController.eliminarPedido(req, res, next)
+    })
+    .patch((req, res, next)=>{
+        PedidosController.actualizarPedido(req, res, next)
+    })
+//por ahora hacemos el patch directo para actualizar el pedido,
+// mas adelante si hay otro tipo de patch para el pedido, volver a este path "/:id/estadoPedido"
 
-router.delete(pathPedidos + "/:id", (req, res) => {
-    PedidosController.eliminarPedido(req,res)
-})
+
+
+
+router.use(errorHandler)
 
 export default router

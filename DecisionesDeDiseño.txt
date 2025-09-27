@@ -1,10 +1,8 @@
-- Un pedido se puede cancelar una vez enviado, pero no una vez entregado.
-  A futuro podria implementarse un estado "Devuelto" en EstadoDePedido que solo puede establecer una vez entregado el pedido
+- Un pedido no se puede cancelar una vez enviado
 
 - Un pedido no se crea si no hay stock. Se crea al darle al boton "pagar"
 
 - Un pedido solo contiene items de un mismo vendedor
-
 
 Cambios de estado de un pedido:
 Pendiente -> Confirmado: El pedido esta pendiente cuando ya se verifica que hay stock por lo tanto se pudo crear el pedido
@@ -14,6 +12,14 @@ en_preparacion -> enviado: cuando envia todos los productos del pedido (lo hace 
 enviado -> entregado: cuando el cliente recibe el pedido
 X -> cancelado: el pedido puede ser cancelado en cualquier momento por el cliente o el vendedor, excepto cuando ya fue entregado
 
-- todo pedido falta verificaciond e que si existe el producto, el usuario, etc
+- a un pedido le falta verificacion de que si existe el producto, el usuario, etc
 
-- un usuario comienza siendo un comprador. Cuando publica un producto se convierte en vendedor, pero todavia puede hacer lo que hace un comprador
+- un usuario puede ser comprador o vendedor. No puede ser ambos ni pasar de uno a otro, para eso tendria que tener 2 cuentas distintas.
+
+Errores feos, con throw sin try catch ni middleware, agregar Middleware
+Mover lógica al service, que Producto no tenga logica de stock
+Devuelven el modelo de negocio en las respuestas, tener un modelo para las API
+Manejen las direcciones dentro del usuario
+
+//por ahora hacemos el patch directo para actualizar el pedido haciendo un patch "/pedidos/id",
+// mas adelante si hay otro tipo de patch para el pedido, volver a este path "/:id/estadoPedido"

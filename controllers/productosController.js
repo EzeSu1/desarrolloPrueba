@@ -1,55 +1,49 @@
-import ProductoService from "../services/productoService.js";
-import {  productoSchema2, idTransform } from "./validadores.js"  //idTransform falta importarlo,
+import ProductosService from "../services/productosService.js";
+import { showBodyErrors, validarIdParam } from "./validadores.js"
+import { productoSchema } from "./schemas/productoSchema.js";
+import { ProductoDoesNotExist } from "../errors/ProductoDoesNotExist.js";
+import ProductosDTOs from "../DTOs/productosDTO.js";
 
-class ProductosController {
-    constructor() {
-        this.productosService = ProductoService;
+
+ class ProductosController {
+
+
+    obtenerProducto(req, res, next) {
+        const producto_id = validarIdParam(req, res)
+
+        ProductosService.obtenerProducto(producto_id)
+            .then(productoBuscado => {
+                if (!productoBuscado) {
+                    throw new ProductoDoesNotExist(producto_id)
+                }
+
+                res.status(200).json(ProductosDTOs.productoToDTO(productoBuscado))
+            })
+            .catch(next)
     }
 
-    obtenerProducto(req, res) {
-        const resultId = idTransform.safeParse(req.params.id)
-
-        if(resultId.error) {
-            res.status(400).json(resultId.error.issues)
-            return
-        }
-
-        const id = resultId.data
-        const producto = this.productosService.obtenerProducto(id);
-
-        if(!producto) {
-            res.status(404).json({ error: "Producto no encontrado con ese ID" })
-            return
-        }
-
-        res.status(200).json(producto)
-    }
-
-
-
-    crearProducto(req, res) {
+    crearProducto(req, res, next) {
         const body = req.body
-        const resultBody = productoSchema2.safeParse(body)
+        const result_body = productoSchema.safeParse(body)
 
-        if(!resultBody.success) {
-            const errores = resultBody.error.issues.map(e => ({
-                path: e.path.join("."),
-                message: e.message
-            }));
-            res.status(400).json({ errores })
-            return
+        if (!result_body.success) {
+            return showBodyErrors(req, res, result_body)
         }
 
-        const productoCreado = this.productosService.crearProducto(resultBody.data);
-
-        if(!productoCreado) {
-            res.status(500).json({ error: "Error al crear el producto" })
-            return
-        }
-
-        res.status(201).json(productoCreado)
+        ProductosService.crearProducto(result_body.data)
+            .then(producto_creado => res.status(201).json(ProductosDTOs.productoToDTO(producto_creado)))
+            .catch(next)
     }
-
+    /*
+    static instance() {
+        if (!ProductosController.singleton) {
+            ProductosController.singleton = new ProductosController();
+        }
+        return ProductosController.singleton;
+    }
+    */
 }
 
+
 export default new ProductosController();
+

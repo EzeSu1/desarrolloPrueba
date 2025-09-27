@@ -35,53 +35,12 @@ product 1:
   "activo": true
 }
 
-Items:
-
-item 1:
-
-{
-  "producto": {
-    "vendedorId": 1,
-    "titulo": "Camiseta de algodón",
-    "descripcion": "Camiseta 100% algodón, color negro",
-    "categorias": [
-      { "nombre": "ropa" },
-      { "nombre": "hombre" }
-    ],
-    "precio": 2500,
-    "moneda": "PESO_ARG",
-    "stock": 50,
-    "fotos": ["foto1.jpg"],
-    "activo": true
-  },
-  "cantidad": 2
-}
-
-item 2:
-{
-    "producto": {
-      "vendedorId": 2,
-      "titulo": "Zapatillas urbanas",
-      "descripcion": "Zapatillas de cuero sintético, color blanco",
-      "categorias": [
-        { "nombre": "calzado" },
-        { "nombre": "urbano" }
-      ],
-      "precio": 13500,
-      "moneda": "PESO_ARG",
-      "stock": 20,
-      "fotos": ["zapas1.png", "zapas2.png"],
-      "activo": true
-    },
-    "cantidad": 1
- }
 
 Dirección Entrega:
 
 dirección 1:
 
 {
-  "usuarioId": 2,
   "calle": "Av. Corrientes",
   "altura": 1234,
   "piso": 7,
@@ -107,7 +66,6 @@ Pedido 1:
   ],
   "moneda": "PESO_ARG",
   "direccionEntrega": {
-      "usuarioId": 2,
       "calle": "Av. Siempre Viva",
       "altura": 742,
       "piso": 3,
@@ -119,4 +77,13 @@ Pedido 1:
       "latitud": -34.6037,
       "longitud": -58.3816
     }
+}
+
+
+patch pedido
+
+{
+  "usuarioId": 1,
+  "estado": "ENVIADO",
+  "motivo": "El pedido esta disponible"
 }

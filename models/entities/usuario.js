@@ -1,5 +1,3 @@
-import { TipoUsuario } from "../enums/tipoUsuario.js"
-
 export class Usuario {
     constructor(nombre, email, telefono, tipo) {
         this.id = null

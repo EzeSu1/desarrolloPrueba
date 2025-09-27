@@ -1,7 +1,5 @@
 export class DireccionEntrega {
-    constructor(usuario, calle, altura, piso, departamento, codigoPostal, ciudad, provincia, pais, latitud, longitud) {
-        this.id = null
-        this.usuario = usuario
+    constructor(calle, altura, piso, departamento, codigoPostal, ciudad, provincia, pais, latitud, longitud) {
         this.calle = calle
         this.altura = altura
         this.piso = piso
