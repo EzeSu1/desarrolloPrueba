@@ -13,7 +13,7 @@ export class PedidosController {
 
         PedidosService.obtenerPedido(pedido_id)
             .then(pedido => res.status(200).json(PedidosDTOs.pedidoToDTO(pedido)))
-            .catch(next)
+            .catch(next) //TODO: SACAR
     }
 
     crearPedido(req, res,next) {
@@ -25,7 +25,7 @@ export class PedidosController {
 
         PedidosService.crearPedido(result_body.data)
             .then(pedidoCreado=> res.status(201).json(PedidosDTOs.pedidoToDTO(pedidoCreado)))
-            .catch(next)
+            .catch(next) // TODO: SACAR
     }
 
     actualizarPedido(req, res, next) {
@@ -43,7 +43,7 @@ export class PedidosController {
         const nuevo_estado_json = result_body.data
         PedidosService.actualizarPedido(id_pedido, nuevo_estado_json)
             .then(pedidoActualizado => res.status(200).json(PedidosDTOs.pedidoActualizadoOutPutDTO(pedidoActualizado)))
-            .catch(next)
+            .catch(next) // TODO: CACAR
     }
 
     eliminarPedido(req, res, next) {
@@ -51,7 +51,7 @@ export class PedidosController {
 
         PedidosService.eliminarPedido(pedido_id)
             .then(pedidoEliminado => res.status(200).json(PedidosDTOs.pedidoToDTO(pedidoEliminado)))
-            .catch(next)
+            .catch(next) // TODO: SACAR
     }
 
     /*
@@ -63,5 +63,6 @@ export class PedidosController {
     }
     */
 }
+
 
 export default new PedidosController();

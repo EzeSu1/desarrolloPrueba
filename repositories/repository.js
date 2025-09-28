@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import NotificacionesMapper from "../mappers/notificacionesMapper.js";
+
 
 export class Repository {
     constructor(filePath, mapper) {
@@ -14,9 +14,7 @@ export class Repository {
                 const dataObjects = JSON.parse(data);
 
                 return this.mapper(dataObjects);
-
             });
-
     }
 
     findById(id) {
@@ -37,7 +35,4 @@ export class Repository {
                     .then(()=>objeto)}
             );
     }
-
-
-
 }

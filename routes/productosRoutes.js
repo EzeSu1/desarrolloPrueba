@@ -3,7 +3,9 @@ import express from "express"
 import {errorHandler} from "../middlewares/errorHandler.js";
 
 
+
 const router= express.Router()
+
 
 router.route("/:id")
     .get((req, res, next) => {
@@ -15,6 +17,8 @@ router.route("/")
         ProductosController.crearProducto(req, res, next)
 })
 
+
 router.use(errorHandler)
+
 
 export default router;

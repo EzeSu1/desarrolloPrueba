@@ -1,6 +1,6 @@
 export class ProductoDoesNotExist extends Error{
-    constructor(id) {
+    constructor() {
         super();
-        this.message= "No existe un producto con este ID: " + id+".";
+        this.message= "No existe un producto con ese ID.";
     }
 }

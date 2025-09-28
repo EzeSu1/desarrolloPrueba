@@ -1,11 +1,10 @@
-import { Categoria } from "../models/entities/categoria.js";
 import { Producto } from "../models/entities/producto.js";
-import {Usuario} from "../models/entities/usuario.js";
 import usuariosMapper from "./usuariosMapper.js";
 
 
 
-class ProductosMapper{
+class ProductosMapper {
+
     map(productoJson, vendedor, categorias) {
         return new Producto(vendedor, productoJson.titulo, productoJson.descripcion, categorias, productoJson.precio, productoJson.moneda, productoJson.stock, productoJson.fotos)
     }
@@ -21,7 +20,7 @@ class ProductosMapper{
         producto.id = dataObjects.id
         return producto;
     }
-
 }
+
 
 export default new ProductosMapper();

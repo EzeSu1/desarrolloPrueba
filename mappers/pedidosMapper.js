@@ -1,4 +1,3 @@
-
 import {Pedido} from "../models/entities/pedido.js"
 import UsuariosMapper from "./usuariosMapper.js";
 import {ItemPedido} from "../models/entities/itemPedido.js";
@@ -8,6 +7,7 @@ import {CambioEstadoPedido} from "../models/entities/cambioEstadoPedido.js";
 
 
 class PedidosMapper{
+
     map(nuevoPedidoJson, comprador, items, direccion) {
         return new Pedido(comprador, items, nuevoPedidoJson.moneda, direccion)
     }
@@ -34,7 +34,7 @@ class PedidosMapper{
 
         return pedido
     }
-
 }
+
 
 export default new PedidosMapper();

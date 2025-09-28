@@ -27,4 +27,5 @@ class NotificacionesService{
     }*/
 }
 
+
 export default new NotificacionesService()

@@ -3,23 +3,11 @@ import {Repository} from "./repository.js";
 import fs from "node:fs/promises";
 
 
+
 class NotificacionesRepository extends Repository {
 
     constructor() {
         super("notificaciones.json",(data) => NotificacionesMapper.mapToNotificacionesObject(data));
-    }
-
-    save(notificacion) {
-        this.getAll()
-            .then(notificaciones =>{
-                notificacion.id = notificaciones.length === 0 ? 1 : notificaciones.length + 1;
-                notificaciones.push(notificacion)
-                fs.writeFile(
-                    this.filePath,
-                    JSON.stringify(notificaciones)
-                )
-            });
-
     }
 
     findByUserId(userId) {
@@ -29,5 +17,6 @@ class NotificacionesRepository extends Repository {
             })
     }
 }
+
 
 export default NotificacionesRepository

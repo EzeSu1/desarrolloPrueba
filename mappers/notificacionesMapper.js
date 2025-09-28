@@ -1,9 +1,10 @@
 import {Notificacion} from "../models/entities/notificacion.js";
-import UsuariosRepository from "../repositories/usuariosRepository.js";
 import UsuariosMapper from "./usuariosMapper.js";
 
 
-class NotificacionesMapper{
+
+class NotificacionesMapper {
+
     mapToNotificacionesObject(dataObjects) {
         return dataObjects.map(this.mapToNotificacionObject);
     }
@@ -16,6 +17,7 @@ class NotificacionesMapper{
         notificacion.fecha_leida= dataObjects.fecha_leida ? new Date(dataObjects.fecha_leida) :  null;
         return notificacion;
     }
-
 }
+
+
 export default new NotificacionesMapper()

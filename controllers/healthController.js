@@ -12,4 +12,5 @@ class HealthController {
     */
 }
 
+
 export default new HealthController();

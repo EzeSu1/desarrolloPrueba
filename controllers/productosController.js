@@ -5,20 +5,14 @@ import { ProductoDoesNotExist } from "../errors/ProductoDoesNotExist.js";
 import ProductosDTOs from "../DTOs/productosDTO.js";
 
 
- class ProductosController {
 
+ class ProductosController {
 
     obtenerProducto(req, res, next) {
         const producto_id = validarIdParam(req, res)
 
         ProductosService.obtenerProducto(producto_id)
-            .then(productoBuscado => {
-                if (!productoBuscado) {
-                    throw new ProductoDoesNotExist(producto_id)
-                }
-
-                res.status(200).json(ProductosDTOs.productoToDTO(productoBuscado))
-            })
+            .then(productoBuscado => {res.status(200).json(ProductosDTOs.productoToDTO(productoBuscado))})
             .catch(next)
     }
 
@@ -34,16 +28,7 @@ import ProductosDTOs from "../DTOs/productosDTO.js";
             .then(producto_creado => res.status(201).json(ProductosDTOs.productoToDTO(producto_creado)))
             .catch(next)
     }
-    /*
-    static instance() {
-        if (!ProductosController.singleton) {
-            ProductosController.singleton = new ProductosController();
-        }
-        return ProductosController.singleton;
-    }
-    */
 }
 
 
 export default new ProductosController();
-

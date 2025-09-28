@@ -1,17 +1,13 @@
-
-import UsuariosMapper from "../mappers/usuariosMapper.js";
 import {Repository} from "./repository.js";
+import UsuariosMapper from "../mappers/usuariosMapper.js";
 
-class UsuariosRepository extends Repository{
+
+
+class UsuariosRepository extends Repository {
     constructor() {
-        super("usuarios.json" ,(data) => UsuariosMapper.mapToUsuariosObject(data));
+        super("usuarios.json",(data) => UsuariosMapper.mapToUsuariosObject(data));
     }
-
-
 }
 
 
-
 export default UsuariosRepository
-
-

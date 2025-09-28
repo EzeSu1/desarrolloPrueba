@@ -5,6 +5,8 @@ import UsuariosDTOs from "../DTOs/usuariosDTO.js";
 import PedidosDTOs from "../DTOs/pedidosDTOs.js";
 import NotificacionesDTOs from "../DTOs/notificacionesDTOs.js";
 
+
+
 class UsuariosController {
 
     obtenerUsuario(req, res, next) {
@@ -12,8 +14,7 @@ class UsuariosController {
 
         UsuariosService.obtenerUsuario(usuario_id)
             .then(usuario => res.status(200).json(UsuariosDTOs.usuarioToDTO(usuario)))
-            .catch(next)
-
+            .catch(next) // TODO: Preguntar
     }
 
     obtenerNotificacionesUsuario(req, res, next) {
@@ -44,16 +45,7 @@ class UsuariosController {
             .then(usuario_creado => res.status(201).json(UsuariosDTOs.usuarioToDTO(usuario_creado)))
             .catch(next)
     }
-    /*
-    static instance() {
-        if (!UsuariosController.singleton) {
-            UsuariosController.singleton = new UsuariosController();
-        }
-        return UsuariosController.singleton;
-    }
-    */
-
 }
 
-export default new UsuariosController();
 
+export default new UsuariosController();
