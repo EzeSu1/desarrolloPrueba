@@ -1,12 +1,13 @@
 import {Repository} from "./repository.js";
-import UsuariosMapper from "../mappers/usuariosMapper.js";
-
+import {UsuarioModel} from "../models/entities/usuario.js";
 
 
 class UsuariosRepository extends Repository {
     constructor() {
-        super("usuarios.json",(data) => UsuariosMapper.mapToUsuariosObject(data));
+        super(UsuarioModel);
     }
+
+
 }
 
 

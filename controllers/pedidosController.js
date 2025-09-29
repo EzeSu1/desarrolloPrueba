@@ -33,10 +33,10 @@ export class PedidosController {
         const result_body = cambioEstadoSchema.safeParse(req.body)
 
         if (!result_body.success) {
-            return showBodyErrors(result_body)
+            return showBodyErrors(req, res, result_body)
         }
-        else if (result_id.error) {
-            return res.status(400).json(result_body.error.issues)
+        if (result_id.error) {
+            return res.status(400).json(result_id.error.issues)
         }
 
         const id_pedido = result_id.data
@@ -46,13 +46,6 @@ export class PedidosController {
             .catch(next) // TODO: CACAR
     }
 
-    eliminarPedido(req, res, next) {
-        const pedido_id = validarIdParam(req, res)
-
-        PedidosService.eliminarPedido(pedido_id)
-            .then(pedidoEliminado => res.status(200).json(PedidosDTOs.pedidoToDTO(pedidoEliminado)))
-            .catch(next) // TODO: SACAR
-    }
 
     /*
     static instance() {

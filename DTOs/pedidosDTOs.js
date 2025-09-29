@@ -15,10 +15,9 @@ class PedidosDTOs {
 
     pedidoActualizadoOutPutDTO(pedido){
         return {
-            "comprador": pedido.comprador.getId(),
+            "comprador": pedido.comprador._id,
             "pedidoId" : pedido.id,
-            "estado": pedido.estado,
-            "historial_estados": pedido.historial_estados
+            "estado": pedido.estado
         }
 
     }

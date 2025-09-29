@@ -16,6 +16,16 @@ import ProductosDTOs from "../DTOs/productosDTO.js";
             .catch(next)
     }
 
+     mostrarProductos(req, res, next) {
+        const filtros = req.query
+
+         ProductosService.mostrarProductos(filtros)
+             .then(productos => {res.status(200).json(ProductosDTOs.productosToDTO(productos))})
+             .catch(next)
+     }
+
+
+
     crearProducto(req, res, next) {
         const body = req.body
         const result_body = productoSchema.safeParse(body)

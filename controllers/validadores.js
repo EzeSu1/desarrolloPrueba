@@ -1,32 +1,27 @@
 import { z } from "zod";
+import { Types } from "mongoose";
 
-
-
-export const idTransform = z.string().transform(((value, ctx)  => {
-    const number = Number(value);
-
-    if (isNaN(number)) {
+export const idTransform = z.string().transform((value, ctx) => {
+    if (!Types.ObjectId.isValid(value)) {
         ctx.addIssue({
             code: "INVALID_ID",
-            message: "id must be a number"
+            message: "Debe ser un ObjectId"
         });
-
         return z.NEVER;
     }
-
-    return number;
-}))
-
+    return value; // devuelve el string válido
+});
 
 export function validarIdParam(req, res) {
-    const result_id = idTransform.safeParse(req.params.id)
+    const result = idTransform.safeParse(req.params.id);
 
-    if(result_id.error) {
-        return res.status(400).json(result_id.error.issues)
+    if (!result.success) {
+        return res.status(400).json(result.error.issues);
     }
 
-    return result_id.data
+    return result.data; // devuelve el string validado
 }
+
 
 
 export function showBodyErrors(req, res, result_body) {

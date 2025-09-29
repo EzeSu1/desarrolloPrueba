@@ -1,6 +1,23 @@
+import mongoose from "mongoose";
+import {categoriaSchema} from "./categoria.js";
+
+
+const productoSchema = new mongoose.Schema({
+    vendedor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true },
+    titulo: { type: String, required: true },
+    descripcion: { type: String, required: true },
+    categorias: [categoriaSchema],
+    precio: Number,
+    moneda: String,
+    stock: Number,
+    fotos: [String],
+    activo: { type: Boolean, default: true },
+    },{timestamps : true, collection : "Productos"});
+
+
+
 export class Producto {
     constructor(vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos) {
-        this.id = null
         this.vendedor = vendedor
         this.titulo = titulo
         this.descripcion = descripcion
@@ -14,7 +31,7 @@ export class Producto {
 
 
     getIdVendedor() {
-        return this.vendedor.getId()
+        return this.vendedor._id
     }
 
     getPrecio() {
@@ -42,3 +59,7 @@ export class Producto {
     }
 
 }
+
+productoSchema.loadClass(Producto)
+
+export const ProductoModel= mongoose.model("Producto", productoSchema)

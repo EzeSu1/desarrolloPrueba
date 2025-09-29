@@ -1,21 +1,21 @@
-import NotificacionesMapper from "../mappers/notificacionesMapper.js";
+
 import {Repository} from "./repository.js";
-import fs from "node:fs/promises";
+
+import {NotificacionModel} from "../models/entities/notificacion.js";
 
 
 
 class NotificacionesRepository extends Repository {
 
     constructor() {
-        super("notificaciones.json",(data) => NotificacionesMapper.mapToNotificacionesObject(data));
+        super(NotificacionModel);
     }
 
     findByUserId(userId) {
-        return this.getAll()
-            .then(notificaciones=>{
-                return notificaciones.filter(n => n.usuario_destino.id === Number(userId))
-            })
+        return this.model.find({ usuario_destino: userId })
+
     }
+
 }
 
 

@@ -73,9 +73,6 @@ export class PedidosService {
             })
     }
 
-    eliminarPedido(pedido_id) {
-        return this.pedidosRepository.deleteById(pedido_id)
-    }
 }
 
 

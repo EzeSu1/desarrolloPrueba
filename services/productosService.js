@@ -9,11 +9,15 @@ import UsuariosValidator from "./validators/usuariosValidator.js";
 
 class ProductosService {
     constructor() {
-        this.productoRepository = new ProductosRepository()
+        this.productosRepository = new ProductosRepository()
+    }
+    mostrarProductos(filtros) {
+        return this.productosRepository.findbyPage(filtros)
+            .then(producto => ProductosValidator.validarProducto(producto))
     }
 
     obtenerProducto(producto_id) {
-        return this.productoRepository.findById(producto_id)
+        return this.productosRepository.findById(producto_id)
             .then(producto => ProductosValidator.validarProducto(producto))
     }
 
@@ -22,11 +26,11 @@ class ProductosService {
         const vendedor_id = nuevo_producto_json.vendedorId
 
         return UsuariosService.obtenerUsuario(vendedor_id)
-            .then(vendedor => UsuariosValidator.validarVendedor(vendedor))
-            .then(vendedor => {
+            .then(vendedor =>{
+                UsuariosValidator.validarVendedor(vendedor)
                 const categorias = CategoriaMapper.map(nuevo_producto_json.categorias) //
                 const nuevo_producto = ProductosMapper.map(nuevo_producto_json, vendedor, categorias)
-                return this.productoRepository.save(nuevo_producto)})
+                return this.productosRepository.save(nuevo_producto)})
             .then(nuevo_producto => nuevo_producto) // TODO: SACAR
     }
 }

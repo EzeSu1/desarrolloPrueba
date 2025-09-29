@@ -1,6 +1,7 @@
 class UsuariosDTOs {
     usuarioToDTO(usuario) {
         return {
+            "id": usuario._id,
             "nombre": usuario.nombre,
             "email": usuario.email,
             "telefono": usuario.telefono,

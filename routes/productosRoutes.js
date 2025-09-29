@@ -7,12 +7,16 @@ import {errorHandler} from "../middlewares/errorHandler.js";
 const router= express.Router()
 
 
+
+
 router.route("/:id")
     .get((req, res, next) => {
         ProductosController.obtenerProducto(req, res, next)
     })
 
 router.route("/")
+    .get((req, res, next) => {
+    ProductosController.mostrarProductos(req, res, next)})
     .post((req, res, next) => {
         ProductosController.crearProducto(req, res, next)
 })

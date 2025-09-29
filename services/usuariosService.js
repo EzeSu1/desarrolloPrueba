@@ -19,13 +19,13 @@ class UsuariosService {
 
     obtenerPedidosUsuario(usuario_id) {
         return this.obtenerUsuario(usuario_id)
-            .then(usuario => PedidosService.obtenerPedidosPorIdUsuario(usuario.getId()))
+            .then(usuario => PedidosService.obtenerPedidosPorIdUsuario(usuario._id))
             .then(pedidos => pedidos)// TODO: SACAR
     }
 
     obtenerNotificacionesUsuario(usuario_id) {
         return this.obtenerUsuario(usuario_id)
-            .then(usuario => NotificacionesService.obtenerNotificaciones(usuario.getId()))
+            .then(usuario => NotificacionesService.obtenerNotificaciones(usuario._id))
             .then(notificaciones => notificaciones)// TODO: SACAR
     }
 
