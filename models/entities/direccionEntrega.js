@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-export const direccionEntregaSchema = new mongoose.Schema({
+
+export const directionOrderSchema = new mongoose.Schema({
     calle: { type: String, required: true },
     altura: { type: Number, required: true },
     piso: { type: Number },
@@ -12,6 +13,7 @@ export const direccionEntregaSchema = new mongoose.Schema({
     latitud: { type: Number },
     longitud: { type: Number }
 }, { _id: false });
+
 
 export class DireccionEntrega {
     constructor(calle, altura, piso, departamento, codigoPostal, ciudad, provincia, pais, latitud, longitud) {

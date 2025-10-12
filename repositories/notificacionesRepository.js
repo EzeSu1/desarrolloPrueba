@@ -1,21 +1,24 @@
-
 import {Repository} from "./repository.js";
-
-import {NotificacionModel} from "../models/entities/notificacion.js";
-
+import {NotificationModel} from "../models/entities/notificacion.js"
 
 
 class NotificacionesRepository extends Repository {
 
     constructor() {
-        super(NotificacionModel);
+        super(NotificationModel);
     }
 
-    findByUserId(userId) {
-        return this.model.find({ usuario_destino: userId })
-
+    findByUserId(filtros) {
+        return this.model.find(filtros)
     }
 
+    readNotification(notificationId) {
+        return this.model.findById(notificationId)
+            .then( notificacion=>{
+                notificacion.marcarComoLeida()
+                return notificacion.save()
+            })
+    }
 }
 
 

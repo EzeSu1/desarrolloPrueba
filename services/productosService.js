@@ -11,39 +11,27 @@ class ProductosService {
     constructor() {
         this.productosRepository = new ProductosRepository()
     }
-    mostrarProductos(filtros) {
-        return this.productosRepository.findbyPage(filtros)
+
+    obtenerProducto(productoId) {
+        return this.productosRepository.findById(productoId)
             .then(producto => ProductosValidator.validarProducto(producto))
     }
 
-    obtenerProducto(producto_id) {
-        return this.productosRepository.findById(producto_id)
-            .then(producto => ProductosValidator.validarProducto(producto))
+    obtenerProductosPaginado(pagina, filtros, ordenamiento) {
+        return this.productosRepository.findbyPage(pagina, filtros, ordenamiento)
     }
 
-    // TODO: REDUCIR
-    crearProducto(nuevo_producto_json) {
-        const vendedor_id = nuevo_producto_json.vendedorId
+    crearProducto(nuevoProductoJson) {
+        const vendedor_id = nuevoProductoJson.vendedorId
 
         return UsuariosService.obtenerUsuario(vendedor_id)
-            .then(vendedor =>{
+            .then(vendedor => {
                 UsuariosValidator.validarVendedor(vendedor)
-                const categorias = CategoriaMapper.map(nuevo_producto_json.categorias) //
-                const nuevo_producto = ProductosMapper.map(nuevo_producto_json, vendedor, categorias)
+                const categorias = CategoriaMapper.map(nuevoProductoJson.categorias) //
+                const nuevo_producto = ProductosMapper.map(nuevoProductoJson, vendedor, categorias)
                 return this.productosRepository.save(nuevo_producto)})
-            .then(nuevo_producto => nuevo_producto) // TODO: SACAR
     }
 }
 
-/*
-return this.productoRepository.save(
-  ProductosMapper.map(
-    nuevo_producto_json,
-    vendedor,
-    CategoriaMapper.map(nuevo_producto_json.categorias)
-  )
-);
-
- */
 
 export default new ProductosService();

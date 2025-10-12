@@ -1,18 +1,19 @@
 import mongoose from "mongoose";
-import {categoriaSchema} from "./categoria.js";
+import {categorySchema} from "./categoria.js";
+import {Usuario} from "./usuario.js";
 
 
-const productoSchema = new mongoose.Schema({
-    vendedor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true },
-    titulo: { type: String, required: true },
-    descripcion: { type: String, required: true },
-    categorias: [categoriaSchema],
-    precio: Number,
-    moneda: String,
-    stock: Number,
-    fotos: [String],
-    activo: { type: Boolean, default: true },
-    },{timestamps : true, collection : "Productos"});
+const productSchema = new mongoose.Schema({
+    vendedor: {type : mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true},
+    titulo: {type : String, required : true},
+    descripcion: {type : String ,required : true},
+    categorias: [categorySchema],
+    precio: {type: Number , default: 0},
+    moneda: {type : String, required : true},
+    stock: {type : Number, required : true},
+    fotos: [{type : String, required : true}],
+    activo: {type : Boolean, require : true},
+}, {timestamps : true, collection : "Productos"})
 
 
 
@@ -29,15 +30,6 @@ export class Producto {
         this.activo = true
     }
 
-
-    getIdVendedor() {
-        return this.vendedor._id
-    }
-
-    getPrecio() {
-        return this.precio
-    }
-
     modificarPrecio(nuevoPrecio){
         this.precio = nuevoPrecio
     }
@@ -47,7 +39,11 @@ export class Producto {
     }
 
     estaDisponible(cantidad) {
-        return this.stock >= cantidad && this.activo
+        return this.hayStock(cantidad) && this.activo
+    }
+
+    hayStock(cantidad) {
+        return this.stock >= cantidad
     }
 
     reducirStock(cantidad) {
@@ -57,9 +53,7 @@ export class Producto {
     aumentarStock(cantidad) {
         this.stock += cantidad
     }
-
 }
 
-productoSchema.loadClass(Producto)
-
-export const ProductoModel= mongoose.model("Producto", productoSchema)
+productSchema.loadClass(Producto)
+export const ProductModel = mongoose.model("Producto", productSchema)

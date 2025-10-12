@@ -1,8 +1,13 @@
 import {PedidoDoesNotExist} from "../../errors/PedidoDoesNotExist.js";
 import {InvalidPedidoEstadoError} from "../../errors/InvalidPedidoEstadoError.js";
 
-class PedidosValidator{
-    validarPedido(pedido){
+class PedidosValidator {
+
+    validarPedidos(pedidos) {
+        return pedidos.map(pedido => this.validarPedido(pedido))
+    }
+
+    validarPedido(pedido) {
         if (!pedido) {
             throw new PedidoDoesNotExist()
         }

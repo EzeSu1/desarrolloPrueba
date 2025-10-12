@@ -1,17 +1,17 @@
 export class Repository {
     constructor(model) {
-        this.model = model // función para mapear objetos JSON a instancias
+        this.model = model
     }
 
-
-
-    findById(id) {
-        return this.model.findById(id)
-
+    findAll() {
+        return this.model.find()
     }
 
-    save(objeto) {
-        return this.model.create(objeto)
-            .then(obj => obj)
+    findById(object_id) {
+        return this.model.findById(object_id)
+    }
+
+    save(object) {
+        return this.model.create(object)
     }
 }

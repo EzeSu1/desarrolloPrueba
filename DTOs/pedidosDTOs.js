@@ -1,6 +1,7 @@
 class PedidosDTOs {
     pedidoToDTO(pedido) {
         return {
+            "id": pedido._id,
             "comprador": pedido.compradorId,
             "items": pedido.items,
             "total": pedido.total,
@@ -13,13 +14,21 @@ class PedidosDTOs {
         return pedidos.map(pedido => this.pedidoToDTO(pedido))
     }
 
-    pedidoActualizadoOutPutDTO(pedido){
+    pedidoActualizadoOutPutDTO(pedido) {
         return {
             "comprador": pedido.comprador._id,
-            "pedidoId" : pedido.id,
-            "estado": pedido.estado
+            "pedidoId" : pedido._id,
+            "estado": pedido.estado,
+            "historial_estados": this.historialOutPutDTO(pedido.historial_estados)
         }
-
+    }
+    historialOutPutDTO(historial) {
+        return historial.map(cambio => ({
+            "fecha": cambio.fecha,
+            "usuario": cambio._id,
+            "estado": cambio.estado,
+            "motivo": cambio.motivo
+        }))
     }
 }
 

@@ -3,6 +3,10 @@ import {ProductoSinStockError} from "../../errors/ProductoSinStockError.js";
 
 class ProductosValidator {
 
+    validarProductos(productos) {
+        return productos.map(producto => this.validarProducto(producto))
+    }
+
     validarProducto(producto) {
         if (!producto) {
             throw new ProductoDoesNotExist()

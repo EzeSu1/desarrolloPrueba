@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const uri = 'mongodb://localhost:27017/TiendaSolDB';
+const uri = 'mongodb://localhost:27017/TiendaSol';
 
 export function connect() {
     // Retornamos la promesa para poder encadenar .then()

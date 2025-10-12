@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Types } from "mongoose";
 
+
 export const idTransform = z.string().transform((value, ctx) => {
     if (!Types.ObjectId.isValid(value)) {
         ctx.addIssue({
@@ -11,6 +12,7 @@ export const idTransform = z.string().transform((value, ctx) => {
     }
     return value; // devuelve el string válido
 });
+
 
 export function validarIdParam(req, res) {
     const result = idTransform.safeParse(req.params.id);
@@ -30,5 +32,5 @@ export function showBodyErrors(req, res, result_body) {
         message: e.message
     }));
 
-    res.status(400).json({errores})
+    return res.status(400).json({errores})
 }

@@ -1,32 +1,25 @@
 import ProductosService from "../services/productosService.js";
 import { showBodyErrors, validarIdParam } from "./validadores.js"
 import { productoSchema } from "./schemas/productoSchema.js";
-import { ProductoDoesNotExist } from "../errors/ProductoDoesNotExist.js";
 import ProductosDTOs from "../DTOs/productosDTO.js";
 
 
 
- class ProductosController {
+class ProductosController {
 
-    obtenerProducto(req, res, next) {
+    obtenerProducto(req, res) {
         const producto_id = validarIdParam(req, res)
 
-        ProductosService.obtenerProducto(producto_id)
-            .then(productoBuscado => {res.status(200).json(ProductosDTOs.productoToDTO(productoBuscado))})
-            .catch(next)
+        return ProductosService.obtenerProducto(producto_id)
+            .then(productoBuscado => res.status(200).json(ProductosDTOs.productoToDTO(productoBuscado)))
     }
 
-     mostrarProductos(req, res, next) {
-        const filtros = req.query
+    obtenerProductosPaginado(req, res) {
+        return ProductosService.obtenerProductosPaginado(req.page, req.filters, req.sort)
+            .then(productos => res.status(200).json(ProductosDTOs.productosToDTO(productos)))
+    }
 
-         ProductosService.mostrarProductos(filtros)
-             .then(productos => {res.status(200).json(ProductosDTOs.productosToDTO(productos))})
-             .catch(next)
-     }
-
-
-
-    crearProducto(req, res, next) {
+    crearProducto(req, res) {
         const body = req.body
         const result_body = productoSchema.safeParse(body)
 
@@ -34,9 +27,8 @@ import ProductosDTOs from "../DTOs/productosDTO.js";
             return showBodyErrors(req, res, result_body)
         }
 
-        ProductosService.crearProducto(result_body.data)
+        return ProductosService.crearProducto(result_body.data)
             .then(producto_creado => res.status(201).json(ProductosDTOs.productoToDTO(producto_creado)))
-            .catch(next)
     }
 }
 

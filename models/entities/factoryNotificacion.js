@@ -2,9 +2,7 @@ import { EstadoPedido } from "../enums/estadoPedido.js"
 import { Notificacion } from "./notificacion.js"
 
 
-export class FactoryNotificacion {
-
-
+class FactoryNotificacion {
 
     crearSegunEstadoPedido(estado) {
         switch(estado) {
@@ -28,15 +26,14 @@ export class FactoryNotificacion {
 
     crearSegunPedido(pedido) {
         let notificacion;
-        const estado = pedido.getEstado();
 
-        switch (estado) {
+        switch (pedido.estado) {
             case EstadoPedido.PENDIENTE:
             case EstadoPedido.CONFIRMADO:
             case EstadoPedido.EN_PREPARACION:
                 notificacion = new Notificacion(
                     pedido.obtenerVendedor(),
-                    this.crearSegunEstadoPedido(estado)
+                    this.crearSegunEstadoPedido(pedido.estado)
                 );
                 break;
 
@@ -45,7 +42,7 @@ export class FactoryNotificacion {
             case EstadoPedido.ENTREGADO:
                 notificacion = new Notificacion(
                     pedido.comprador,
-                    this.crearSegunEstadoPedido(estado)
+                    this.crearSegunEstadoPedido(pedido.estado)
                 );
                 break;
 
@@ -55,4 +52,4 @@ export class FactoryNotificacion {
     }
 }
 
-export default FactoryNotificacion
+export default new FactoryNotificacion()

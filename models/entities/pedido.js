@@ -1,21 +1,21 @@
 import { EstadoPedido } from "../enums/estadoPedido.js"
-import {CambioEstadoPedido, historialEstadoSchema} from "./cambioEstadoPedido.js"
+import {CambioEstadoPedido, changeStateSchema} from "./cambioEstadoPedido.js"
 import mongoose from "mongoose";
-import {itemPedidoSchema} from "./itemPedido.js";
-import {direccionEntregaSchema} from "./direccionEntrega.js";
+import {itemOrderSchema} from "./itemPedido.js";
+import {directionOrderSchema} from "./direccionEntrega.js";
 
 
+const orderSchema = new mongoose.Schema({
+    comprador: {type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true},
+    items: [itemOrderSchema],
+    total: {type: Number, required: true, default: 0  },
+    moneda: {type: String, required: true},
+    direccion_entrega: directionOrderSchema,
+    estado: {type: String, required : true},
+    fecha_creacion: {type: Date, default : new Date()},
+    historial_estados: [changeStateSchema]
+}, {timestamps: true, collection: "Pedidos"})
 
-const pedidoSchema = new mongoose.Schema({
-    comprador: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true },
-    items: { type: [itemPedidoSchema], required: true},
-    total: { type: Number, required: true, default: 0 },
-    moneda: { type: String, required: true },
-    direccion_entrega: { type: direccionEntregaSchema, required: true },
-    estado: { type: String},
-    historial_estados: { type: [historialEstadoSchema], default: [] },
-    fecha_creacion: { type: Date, default: Date.now }
-}, { timestamps: true, collection: "Pedidos" });
 
 export class Pedido {
     constructor(comprador, items, moneda, direccionEntrega) {
@@ -28,17 +28,6 @@ export class Pedido {
         this.fecha_creacion = new Date()
         this.historial_estados = []
         this.actualizarEstado(EstadoPedido.PENDIENTE, comprador, "Creacion del pedido")
-
-    }
-
-
-
-    getEstado() {
-        return this.estado
-    }
-
-    getCompradorId() {
-        return this.comprador._id
     }
 
     calcularTotal() {
@@ -52,7 +41,6 @@ export class Pedido {
         this.agregarHistorialEstados(nuevo_cambioEstado)
     }
 
-
     agregarHistorialEstados(nuevoCambioEstado) {
         this.historial_estados.push(nuevoCambioEstado)
     }
@@ -62,6 +50,5 @@ export class Pedido {
     }
 }
 
-pedidoSchema.loadClass(Pedido)
-
-export const PedidoModel= mongoose.model("Pedido", pedidoSchema)
+orderSchema.loadClass(Pedido)
+export const OrderModel = mongoose.model("Pedido", orderSchema)

@@ -1,0 +1,656 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  description: API documentation for the application.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local server
+paths:
+  /health-check:
+    get:
+      summary: Check API health
+      responses:
+        '200':
+          description: API is healthy
+  /pedidos:
+    get:
+      summary: Get all orders
+      responses:
+        '200':
+          description: A list of orders
+    post:
+      summary: Crear un nuevo pedido
+      description: Crea un pedido asociando un comprador, productos y dirección de entrega.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                compradorId:
+                  type: string
+                  example: "68dbd76af8bf5d9695066ceb"
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productoId:
+                        type: string
+                        example: "68dbd9730d1b092598620812"
+                      cantidad:
+                        type: integer
+                        example: 41
+                moneda:
+                  type: string
+                  example: "PESO_ARG"
+                direccionEntrega:
+                  type: object
+                  properties:
+                    calle:
+                      type: string
+                      example: "Av. Siempre Viva"
+                    altura:
+                      type: integer
+                      example: 742
+                    piso:
+                      type: integer
+                      example: 3
+                    departamento:
+                      type: string
+                      example: "B"
+                    codigo_postal:
+                      type: string
+                      example: "1234"
+                    ciudad:
+                      type: string
+                      example: "Springfield"
+                    provincia:
+                      type: string
+                      example: "Buenos Aires"
+                    pais:
+                      type: string
+                      example: "Argentina"
+                    latitud:
+                      type: number
+                      format: float
+                      example: -34.6037
+                    longitud:
+                      type: number
+                      format: float
+                      example: -58.3816
+      responses:
+        '201':
+          description: Pedido creado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "68dc771f76552756c3f5f8cc"
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        producto:
+                          type: object
+                          description: Datos completos del producto
+                        cantidad:
+                          type: integer
+                          example: 41
+                        precio_unitario:
+                          type: number
+                          example: 1000
+                  total:
+                    type: number
+                    example: 41000
+                  moneda:
+                    type: string
+                    example: "PESO_ARG"
+                  direccion_entrega:
+                    type: object
+                    example: {}
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        example: "No existe un usuario con ese ID."
+
+        '409':
+          description: No hay stock disponible para el producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No hay stock para el producto con este ID."
+  /pedidos/{id}:
+    get:
+      summary: Obtener un pedido por ID
+      description: Retorna la información de un pedido específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del pedido a consultar
+          schema:
+            type: string
+            example: "68dbdda29f8df1f2349fa687"
+      responses:
+        '200':
+          description: Pedido encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "68dbdda29f8df1f2349fa687"
+                  items:
+                    type: array
+                    description: Lista de productos dentro del pedido
+                    items:
+                      type: object
+                      properties:
+                        producto:
+                          type: string
+                          description: ID del producto
+                          example: "68dbd9730d1b092598620812"
+                        cantidad:
+                          type: integer
+                          example: 41
+                        precio_unitario:
+                          type: number
+                          example: 1000
+                  total:
+                    type: number
+                    example: 41000
+                  moneda:
+                    type: string
+                    example: "PESO_ARG"
+                  direccion_entrega:
+                    type: object
+                    description: Dirección de entrega del pedido
+                    example: {}
+        '404':
+          description: PedidoDoesNotExist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No existe un pedido con ese ID."
+    patch:
+      summary: Update an order status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CambioEstadoPedido'
+      responses:
+        '200':
+          description: Order status updated
+    delete:
+      summary: Delete an order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Order deleted
+  /productos:
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: A list of products
+    post:
+      summary: Crear un nuevo producto
+      description: Permite a un vendedor registrar un producto en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vendedorId:
+                  type: string
+                  description: ID del vendedor que publica el producto
+                  example: "68dbd721f8bf5d9695066ce7"
+                titulo:
+                  type: string
+                  description: Título del producto
+                  example: "Camiseta de algodón"
+                descripcion:
+                  type: string
+                  description: Descripción detallada del producto
+                  example: "Camiseta 100% algodón, color negro"
+                categorias:
+                  type: array
+                  description: Lista de categorías asociadas al producto
+                  items:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: "ropa"
+                precio:
+                  type: number
+                  description: Precio del producto
+                  example: 1000
+                moneda:
+                  type: string
+                  description: Moneda en la que se encuentra el precio
+                  example: "PESO_ARG"
+                stock:
+                  type: integer
+                  description: Cantidad disponible en inventario
+                  example: 50
+                fotos:
+                  type: array
+                  description: URLs o nombres de archivos de imágenes del producto
+                  items:
+                    type: string
+                  example: ["foto1.jpg"]
+                activo:
+                  type: boolean
+                  description: Indica si el producto está activo para la venta
+                  example: true
+      responses:
+        '201':
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "68dbd721f8bf5d9695066ce7"
+                  mensaje:
+                    type: string
+                    example: "Producto creado correctamente"
+        '400':
+          description: Error de validación en los datos enviados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errores:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        message:
+                          type: string
+  /productos/{id}:
+    get:
+      summary: Obtener un producto por ID
+      description: Retorna la información de un producto específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a consultar
+          schema:
+            type: string
+            example: "68dbd9730d1b092598620812"
+      responses:
+        '200':
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "68dbd9730d1b092598620812"
+                  vendedor:
+                    type: string
+                    example: "68dbd721f8bf5d9695066ce7"
+                  titulo:
+                    type: string
+                    example: "Camiseta de algodón"
+                  descripcion:
+                    type: string
+                    example: "Camiseta 100% algodón, color negro"
+                  precio:
+                    type: number
+                    example: 1000
+                  moneda:
+                    type: string
+                    example: "PESO_ARG"
+                  stock:
+                    type: integer
+                    example: 50
+                  fotos:
+                    type: array
+                    items:
+                      type: string
+                    example: ["foto1.jpg"]
+        '404':
+          description: "ProductDoesNotExist"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No existe un producto con ese ID."
+  /usuarios:
+    post:
+      summary: Crear un nuevo usuario
+      description: Crea un usuario con nombre, email, teléfono y tipo.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+                - email
+                - telefono
+                - tipo
+              properties:
+                nombre:
+                  type: string
+                  example: Juan Perez
+                  description: Nombre completo del usuario
+                email:
+                  type: string
+                  format: email
+                  example: juan.perez@example.com
+                  description: Correo electrónico del usuario
+                telefono:
+                  type: string
+                  example: "1122334455"
+                  description: Número de teléfono del usuario
+                tipo:
+                  type: string
+                  enum: [COMPRADOR, VENDEDOR, ADMIN]
+                  example: COMPRADOR
+                  description: Tipo de usuario
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "651234abcd5678ef9012"
+                  nombre:
+                    type: string
+                  email:
+                    type: string
+                  telefono:
+                    type: string
+                  tipo:
+                    type: string
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errores:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        message:
+                          type: string
+  /usuarios/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      description: Devuelve la información completa de un usuario específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: "651234abcd5678ef9012"
+          description: ID único del usuario
+      responses:
+        '200':
+          description: Usuario encontrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "651234abcd5678ef9012"
+                  nombre:
+                    type: string
+                    example: Juan Perez
+                  email:
+                    type: string
+                    example: juan.perez@example.com
+                  telefono:
+                    type: string
+                    example: "1122334455"
+                  tipo:
+                    type: string
+                    example: COMPRADOR
+        '404':
+          description: UserDoesNotExist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No existe un usuario con este ID."
+  /usuarios/{id}/notificaciones:
+    get:
+      summary: Obtener notificaciones de un usuario
+      description: Devuelve todas las notificaciones de un usuario específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: "651234abcd5678ef9012"
+          description: ID único del usuario
+      responses:
+        '200':
+          description: Lista de notificaciones del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    mensaje:
+                      type: string
+                      example: "Tu pedido ha sido enviado y está en camino."
+                    fecha_alta:
+                      type: string
+                      format: date-time
+                      example: "2025-09-29T19:39:35.239Z"
+                    leida:
+                      type: boolean
+                      example: false
+                    fecha_leida:
+                      type: string
+                      format: date-time
+                      nullable: true
+                      example: null
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No existe un usuario con este ID."
+  /usuarios/{id}/pedidos:
+    get:
+      summary: Obtener los pedidos de un usuario
+      description: Devuelve todos los pedidos realizados por un usuario específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: "651234abcd5678ef9012"
+          description: ID único del usuario
+      responses:
+        '200':
+          description: Lista de pedidos del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          producto:
+                            type: string
+                            example: "68d9bf568065fff853003cba"
+                          cantidad:
+                            type: integer
+                            example: 41
+                          precio_unitario:
+                            type: number
+                            example: 2500
+                    total:
+                      type: number
+                      example: 102500
+                    moneda:
+                      type: string
+                      example: "PESO_ARG"
+                    direccion_entrega:
+                      type: object
+                      properties:
+                        calle:
+                          type: string
+                          example: "Av. Siempre Viva"
+                        altura:
+                          type: integer
+                          example: 742
+                        piso:
+                          type: string
+                          example: "3"
+                        departamento:
+                          type: string
+                          example: "B"
+                        codigo_postal:
+                          type: string
+                          example: "1234"
+                        ciudad:
+                          type: string
+                          example: "Springfield"
+                        provincia:
+                          type: string
+                          example: "Buenos Aires"
+                        pais:
+                          type: string
+                          example: "Argentina"
+                        latitud:
+                          type: number
+                          example: -34.6037
+                        longitud:
+                          type: number
+                          example: -58.3816
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No existe un usuario con este ID."
+
+components:
+  schemas:
+    Pedido:
+      type: object
+      properties:
+        id:
+          type: string
+        productoId:
+          type: string
+        cantidad:
+          type: integer
+    Producto:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        precio:
+          type: number
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+    CambioEstadoPedido:
+      type: object
+      properties:
+        usuarioId:
+          type: string
+        estado:
+          type: string
+        motivo:
+          type: string

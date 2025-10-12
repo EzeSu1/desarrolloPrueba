@@ -1,7 +1,6 @@
 import NotificacionesRepository from "../repositories/notificacionesRepository.js";
-import { FactoryNotificacion } from "../models/entities/factoryNotificacion.js";
-
-
+import FactoryNotificacion from "../models/entities/factoryNotificacion.js"
+import NotificacionValidator from "./validators/NotificacionValidator.js";
 
 class NotificacionesService{
     constructor() {
@@ -9,22 +8,18 @@ class NotificacionesService{
     }
 
     crearNotificacion(pedido){
-        const factory_Notificacion = new FactoryNotificacion()
-        const nueva_notificacion = factory_Notificacion.crearSegunPedido(pedido)
+        const nueva_notificacion = FactoryNotificacion.crearSegunPedido(pedido)
         this.notificacionesRepository.save(nueva_notificacion)
     }
 
-    obtenerNotificaciones(usuario_id) {
-        return this.notificacionesRepository.findByUserId(usuario_id)
-            .then(notificaciones => notificaciones)
+    obtenerNotificaciones(filtros) {
+        return this.notificacionesRepository.findByUserId(filtros)
     }
-    /*
-    static instance() {
-        if (!NotificacionesService.singleton) {
-            NotificacionesService.singleton = new NotificacionesService();
-        }
-        return NotificacionesService.singleton;
-    }*/
+
+    leerNotificacion(notificacion_id) {
+        return this.notificacionesRepository.readNotification(notificacion_id)
+            .then(notificacion => NotificacionValidator.validarNotificacion(notificacion))
+    }
 }
 
 

@@ -1,8 +1,7 @@
-import {connect} from "./clients/mongoClient.js";
 import dotenv from "dotenv";
 import express from "express";
 import router from "./routes/routes.js";
-
+import {connect} from "./clients/mongoClient.js";
 
 
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development"; //
@@ -12,8 +11,11 @@ const app = express();
 app.use(express.json());
 
 
+
 console.log(`Environment: ${process.env.NODE_ENV}`);
 console.log(`API Base URL: ${process.env.API_BASE_URL}`);
+
+
 
 
 const PORT = process.env.PORT;

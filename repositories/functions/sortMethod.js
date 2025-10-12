@@ -1,4 +1,4 @@
-export function sortMethod(sort){
+export function sortMethod(sort) {
     const sortOptions = {
         precio_asc: { precio: 1 },
         precio_desc: { precio: -1 }

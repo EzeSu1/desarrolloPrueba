@@ -1,7 +1,8 @@
 class NotificacionesDTOs {
     notificacionToDTO(notificacion) {
         return {
-            "usuario_id": notificacion.usuario_destino.id,
+            "id": notificacion._id,
+            "usuario_id": notificacion.usuario_destino,
             "mensaje": notificacion.mensaje,
             "fecha_alta": notificacion.fecha_alta,
             "leida": notificacion.leida,

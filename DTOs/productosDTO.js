@@ -1,7 +1,8 @@
 class ProductosDTOs {
     productoToDTO(producto) {
         return {
-            "vendedor": producto.getIdVendedor(),
+            "id": producto._id,
+            "vendedor": producto.vendedor._id,
             "titulo": producto.titulo,
             "descripcion":producto.descripcion,
             "categorias": producto.categorias,
@@ -12,7 +13,7 @@ class ProductosDTOs {
         }
     }
 
-    productosToDTO(productos){
+    productosToDTO(productos) {
         return productos.map(producto => this.productoToDTO(producto))
     }
 }

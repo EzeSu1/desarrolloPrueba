@@ -16,31 +16,36 @@ export class PedidosService {
         this.pedidosRepository = new PedidosRepository()
     }
 
-    obtenerPedido(pedido_id) {
-        return this.pedidosRepository.findById(pedido_id)
+    obtenerPedido(pedidoId) {
+        return this.pedidosRepository.findById(pedidoId)
             .then(pedido => PedidosValidator.validarPedido(pedido))
     }
 
-    crearPedido(nuevo_pedido_json) {
-        const comprador_id = nuevo_pedido_json.compradorId
+    obtenerPedidosPorIdUsuario(usuarioId) {
+        return this.pedidosRepository.findByUserId({ comprador: usuarioId })
+            .then(pedidos => PedidosValidator.validarPedidos(pedidos))
+    }
+
+    crearPedido(nuevoPedidoJson) {
+        const comprador_id = nuevoPedidoJson.compradorId
 
         return UsuariosService.obtenerUsuario(comprador_id)
             .then(comprador => {
                 UsuariosValidator.validarComprador(comprador)
                 // TODO: Copiar y pegar en el mapper?
-                return Promise.all(nuevo_pedido_json.items.map(itemJson => {
+                return Promise.all(nuevoPedidoJson.items.map(itemJson => {
                         return ProductosService.obtenerProducto(itemJson.productoId)
                         .then(productoBuscado => {
                             ProductosValidator.validarProducto(productoBuscado)
                             ProductosValidator.validarStock(productoBuscado, itemJson.cantidad)
 
-                            return new ItemPedido(productoBuscado, itemJson.cantidad, productoBuscado.getPrecio());
+                            return new ItemPedido(productoBuscado, itemJson.cantidad);
                         })
                 }))
-                    // ItemsPedidoMapper.mapAll(nuevo_pedido_json.items)
+                    // ItemsPedidoMapper.mapAll(nuevoPedidoJson.items)
                 .then(items => {
-                    const direccion = DireccionesMapper.map(nuevo_pedido_json.direccionEntrega)
-                    const nuevo_pedido = PedidosMapper.map(nuevo_pedido_json, comprador, items, direccion)
+                    const direccion = DireccionesMapper.map(nuevoPedidoJson.direccionEntrega)
+                    const nuevo_pedido = PedidosMapper.map(nuevoPedidoJson, comprador, items, direccion)
 
                     NotificacionesService.crearNotificacion(nuevo_pedido)
 
@@ -49,31 +54,24 @@ export class PedidosService {
             })
     }
 
-    obtenerPedidosPorIdUsuario(usuario_id) {
-        return this.pedidosRepository.findByUserId(usuario_id)
-            .then(pedidos => pedidos)
-    }
-
-    actualizarPedido(id_pedido, nuevo_estado_json) {
-        const usuario_id = nuevo_estado_json.usuarioId
+    actualizarPedido(idPedido, nuevoEstadoJson) {
+        const usuario_id = nuevoEstadoJson.usuarioId
         return UsuariosService.obtenerUsuario(usuario_id)
             .then(usuario => {
                 UsuariosValidator.validarUsuario(usuario)
-                return this.pedidosRepository.findById(id_pedido)
+                return this.pedidosRepository.findById(idPedido)
                     .then(pedido => {
                         PedidosValidator.validarPedido(pedido)
-                        PedidosValidator.validarCambioEstado(pedido, nuevo_estado_json.estado)
+                        PedidosValidator.validarCambioEstado(pedido, nuevoEstadoJson.estado)
 
-                        return this.pedidosRepository.update(id_pedido, usuario, nuevo_estado_json.estado, nuevo_estado_json.motivo)
+                        return this.pedidosRepository.update(idPedido, usuario, nuevoEstadoJson.estado, nuevoEstadoJson.motivo)
                     })
             })
-            .then(pedido_actualizado => {
-                NotificacionesService.crearNotificacion(pedido_actualizado)
-                return pedido_actualizado
+            .then(pedidoActualizado => {
+                NotificacionesService.crearNotificacion(pedidoActualizado)
+                return pedidoActualizado
             })
     }
-
 }
-
 
 export default new PedidosService()

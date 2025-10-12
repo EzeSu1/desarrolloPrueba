@@ -4,36 +4,41 @@ import { usuarioSchema } from "./schemas/usuarioSchema.js";
 import UsuariosDTOs from "../DTOs/usuariosDTO.js";
 import PedidosDTOs from "../DTOs/pedidosDTOs.js";
 import NotificacionesDTOs from "../DTOs/notificacionesDTOs.js";
+import ProductosDTOs from "../DTOs/productosDTO.js"
 
 
 
 class UsuariosController {
 
-    obtenerUsuario(req, res, next) {
+    obtenerUsuario(req, res) {
         const usuario_id = validarIdParam(req, res)
 
-        UsuariosService.obtenerUsuario(usuario_id)
+        return UsuariosService.obtenerUsuario(usuario_id)
             .then(usuario => res.status(200).json(UsuariosDTOs.usuarioToDTO(usuario)))
-            .catch(next) // TODO: Preguntar
     }
 
-    obtenerNotificacionesUsuario(req, res, next) {
+    obtenerNotificacionesUsuario(req, res) {
         const usuario_id = validarIdParam(req, res)
 
-        UsuariosService.obtenerNotificacionesUsuario(usuario_id)
+        return UsuariosService.obtenerNotificacionesUsuario(usuario_id, req.filters)
             .then(notificaciones => res.status(200).json(NotificacionesDTOs.notificacionesToDTO(notificaciones)))
-            .catch(next)
     }
 
-    obtenerPedidosUsuario(req, res, next) {
+    obtenerPedidosUsuario(req, res) {
         const usuario_id = validarIdParam(req, res)
 
-        UsuariosService.obtenerPedidosUsuario(usuario_id)
+        return UsuariosService.obtenerPedidosUsuario(usuario_id)
             .then(pedidos => res.status(200).json(PedidosDTOs.pedidosToDTO(pedidos)))
-            .catch(next)
     }
 
-    crearUsuario(req, res, next) {
+    obtenerProductosUsuario(req, res) {
+        const usuario_id = validarIdParam(req, res)
+
+        return UsuariosService.obtenerProductosUsuario(usuario_id, req.page, req.filters, req.sort)
+            .then(productos => res.status(200).json(ProductosDTOs.productosToDTO(productos)))
+    }
+
+    crearUsuario(req, res) {
         const body = req.body
         const result_body = usuarioSchema.safeParse(body)
 
@@ -41,9 +46,8 @@ class UsuariosController {
             return showBodyErrors(req, res, result_body)
         }
 
-        UsuariosService.crearUsuario(result_body.data)
+        return UsuariosService.crearUsuario(result_body.data)
             .then(usuario_creado => res.status(201).json(UsuariosDTOs.usuarioToDTO(usuario_creado)))
-            .catch(next)
     }
 }
 

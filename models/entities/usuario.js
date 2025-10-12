@@ -1,13 +1,13 @@
+import mongoose from "mongoose";
 
-import mongoose from 'mongoose';
 
-const usuarioSchema = new mongoose.Schema({
-    nombre: { type: String, required: true },
-    email: { type: String, required: true },
-    telefono: { type: String },
-    tipo: { type: String, required: true},
-    fecha_alta: { type: Date, default: Date.now, required: true }
-}, {timestamps : true, collection : "Usuarios"});
+const userSchema = new mongoose.Schema({
+    nombre: {type: String, required: true },
+    email: {type: String, required: true, unique: true},
+    telefono: {type: String, required: true },
+    tipo: {type: String, required: true },
+    fecha_alta: {type: Date, default: new Date()}
+}, {timestamps: true, collection: "Usuarios"})
 
 
 export class Usuario {
@@ -20,6 +20,5 @@ export class Usuario {
     }
 }
 
-
-usuarioSchema.loadClass(Usuario)
-export const UsuarioModel = mongoose.model('Usuario', usuarioSchema)
+userSchema.loadClass(Usuario)
+export const UserModel = mongoose.model("Usuario", userSchema)

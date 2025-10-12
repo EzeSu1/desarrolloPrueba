@@ -1,6 +1,6 @@
 export class ProductoSinStockError extends Error{
-    constructor(id) {
+    constructor() {
         super();
-        this.message= "No hay stock para el producto con este ID: " + id+".";
+        this.message= "No hay stock para el producto con este ID.";
     }
 }
