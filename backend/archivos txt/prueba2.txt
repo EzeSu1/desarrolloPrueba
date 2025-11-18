@@ -1,0 +1,68 @@
+
+{
+    "vendedorId": "68dd2ca0c4db8b5f969311d4",
+    "titulo": "Plato grande",
+    "descripcion": "cerámica blanca",
+    "categorias": [
+      { "nombre": "cocina" }
+    ],
+    "precio": 100,
+    "moneda": "PESO_ARG",
+    "stock": 40,
+    "fotos": ["plato_grande.jpg"],
+    "activo": true
+  },
+
+  {
+    "vendedorId": "68dd2ca0c4db8b5f969311d4",
+    "titulo": "Mesa",
+    "descripcion": "Madera de pino",
+    "categorias": [
+      { "nombre": "cocina" },
+      { "nombre": "comedor" }
+    ],
+    "precio": 110,
+    "moneda": "PESO_ARG",
+    "stock": 40,
+    "fotos": ["mesapino.jpg"],
+    "activo": true
+  },
+
+  {
+    "vendedorId": "68dd2ca0c4db8b5f969311d4",
+    "titulo": "television",
+    "descripcion": "144hz 4k 24 pulgadas",
+    "categorias": [
+      { "nombre": "tecnologia" }
+    ],
+    "precio": 200,
+    "moneda": "PESO_ARG",
+    "stock": 40,
+    "fotos": ["televion.jpg"],
+    "activo": true
+  },
+  {
+    "vendedorId": "68dd2ca0c4db8b5f969311d4",
+    "titulo": "Plato decorativo",
+    "descripcion": "cerámica decorada a mano",
+    "categorias": [
+      { "nombre": "cocina" }
+    ],
+    "precio": 90,
+    "moneda": "PESO_ARG",
+    "stock": 20,
+    "fotos": ["plato_decorativo.jpg"],
+    "activo": true
+  }
+
+
+
+  {
+    "usuario": {
+      "nombre": "nombre",
+      "email": "n@gmail.com",
+      "telefono": "1122334455",
+      "tipo": "COMPRADOR"
+    },
+    "password": "123"
+  }

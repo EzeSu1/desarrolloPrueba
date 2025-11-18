@@ -1,0 +1,1 @@
+[{"id":1,"vendedor":{"id":1,"nombre":"Juan Perez","email":"juan.perez@example.com","telefono":"1122334455","tipo":"VENDEDOR","fecha_alta":"2025-09-27T16:43:59.870Z"},"titulo":"Camiseta e algodón","descripcion":"Camiseta 100% algodón, color negro","categorias":[{"nombre":"ropa"},{"nombre":"hombre"}],"precio":2500,"moneda":"PESO_ARG","stock":50,"fotos":["foto1.jpg"],"activo":true}]

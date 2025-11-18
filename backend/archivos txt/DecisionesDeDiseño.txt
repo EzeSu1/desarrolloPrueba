@@ -1,0 +1,28 @@
+- Un pedido no se puede cancelar una vez enviado
+
+- Un pedido no se crea si no hay stock. Se crea al darle al boton "pagar"
+
+- Un pedido solo contiene items de un mismo vendedor
+
+Cambios de estado de un pedido:
+Pendiente -> Confirmado: El pedido esta pendiente cuando ya se verifica que hay stock por lo tanto se pudo crear el pedido
+                         y pasa a estado de confirmado cuando le da el ok el vendedor para ya prepararlo
+Confirmado -> en_preparación: comienza a preparar el pedido (desde que prepara el primer producto del pedido)
+en_preparacion -> enviado: cuando envia todos los productos del pedido (lo hace en un solo envio)
+enviado -> entregado: cuando el cliente recibe el pedido
+X -> cancelado: el pedido puede ser cancelado en cualquier momento por el cliente o el vendedor, excepto cuando ya fue entregado
+
+- a un pedido le falta verificacion de que si existe el producto, el usuario, etc
+
+- un usuario puede ser comprador o vendedor. No puede ser ambos ni pasar de uno a otro, para eso tendria que tener 2 cuentas distintas.
+
+Errores feos, con throw sin try catch ni middleware, agregar Middleware
+Mover lógica al service, que Producto no tenga logica de stock
+Devuelven el modelo de negocio en las respuestas, tener un modelo para las API
+Manejen las direcciones dentro del usuario
+
+//por ahora hacemos el patch directo para actualizar el pedido haciendo un patch "/pedidos/id",
+// mas adelante si hay otro tipo de patch para el pedido, volver a este path "/:id/estadoPedido"
+
+
+//jwt para pasarle al front y despues las contrasenass se guardan en hash en nuestro bd(usamos npm install bcrypt)

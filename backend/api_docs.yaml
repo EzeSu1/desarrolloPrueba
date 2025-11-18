@@ -1,0 +1,598 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  description: API documentation for the application.
+  version: 1.0.0
+
+
+
+#################### < SERVER > ####################
+servers:
+  - url: http://localhost:3000
+    description: local server
+
+
+
+#################### < PATHS > ####################
+paths:
+
+  /health-check:
+    get:
+      summary: Check API health
+      responses:
+        '200':
+          description: API is healthy
+
+  /usuarios:
+    post:
+      summary: Create User
+      description: Crea un usuario con nombre, email, teléfono y tipo.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400': ### TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errores:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        message:
+                          type: string
+  /usuarios/{id}:
+    get:
+      summary: Get User by ID
+      description: Devuelve la información completa de un usuario específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "651234abcd5678ef9012"
+          description: ID único del usuario
+      responses:
+        '200':
+          description: Usuario encontrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: UserDoesNotExist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No existe un usuario con este ID."
+  /usuarios/{id}/notificaciones:
+    get:
+      summary: Get User Notifications
+      description: Devuelve todas las notificaciones de un usuario específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "651234abcd5678ef9012"
+          description: ID único del usuario
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de notificaciones del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notificacion'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No existe un usuario con este ID."
+  /usuarios/{id}/pedidos:
+    get:
+      summary: Get User Orders
+      description: Devuelve todos los pedidos realizados por un usuario específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: "651234abcd5678ef9012"
+      responses:
+        '200':
+          description: Lista de pedidos del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pedido'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No existe un usuario con este ID."
+  /usuarios/{id}/productos:
+    get:
+      summary: Get User Products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de productos del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producto'
+        '404':
+          description: Usuario no encontrado o no es vendedor
+
+  /productos:
+    get:
+      summary: Get Products
+      description: Devuelve productos filtrados, paginados y ordenados según los parámetros enviados.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "precio:asc"
+        - name: categoria
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "ropa"
+          description: Filtrar por categoría
+      responses:
+        '200':
+          description: A list of products
+    post:
+      summary: Create Product
+      description: Permite a un vendedor registrar un producto en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoInput'
+      responses:
+        '201':
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+        '400': ### TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:
+          description: Error de validación en los datos enviados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errores:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        message:
+                          type: string
+  /productos/{id}:
+    get:
+      summary: Get Product by ID
+      description: Retorna la información de un producto específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a consultar
+          schema:
+            type: string
+            example: "68dbd9730d1b092598620812"
+      responses:
+        '200':
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+        '404':
+          description: "ProductDoesNotExist"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No existe un producto con ese ID."
+
+  /pedidos:
+    post:
+      summary: Create Order
+      description: Crea un pedido asociando un comprador, productos y dirección de entrega.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoInput'
+      responses:
+        '201':
+          description: Pedido creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+        '404': ### TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        example: "No existe un usuario con ese ID."
+        '409': ### TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:
+          description: No hay stock disponible para el producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No hay stock para el producto con este ID."
+  /pedidos/{id}:
+    get:
+      summary: Get Order by ID
+      description: Retorna la información de un pedido específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del pedido a consultar
+          schema:
+            type: string
+            example: "68dbdda29f8df1f2349fa687"
+      responses:
+        '200':
+          description: Pedido encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+        '404':
+          description: PedidoDoesNotExist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No existe un pedido con ese ID."
+    patch:  ### TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:TODO:
+      summary: Update Order Status
+      description: Actualiza el estado de un pedido y agrega la entrada correspondiente al historial.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del pedido a consultar
+          schema:
+            type: string
+            example: "68dbdda29f8df1f2349fa687"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CambioEstadoPedidoInput'
+      responses:
+        '200':
+          description: Pedido actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CambioEstadoPedido'
+
+  /notificaciones/{id}/leerNotificacion:
+    post:
+      summary: Mark Notification as Read
+      description: se lee una notificación
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a consultar
+          schema:
+            type: string
+            example: "68dbd9730d1b092598620812"
+      responses:
+        '200':
+          description: Notificacion leida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+
+
+
+#################### < COMPONENTS > ####################
+components:
+  schemas:
+
+    UsuarioInput:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: "Juan Perez"
+        email:
+          type: string
+          format: email
+          example: "jperez@example.com"
+        telefono:
+          type: string
+          example: "1122334455"
+        tipo:
+          type: string
+          enum: [COMPRADOR, VENDEDOR, ADMIN]
+          example: "COMPRADOR"
+    Usuario:
+      allOf:
+        - $ref: '#/components/schemas/UsuarioInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "651234abcd5678ef9012"
+
+    Notificacion:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "68dfc1bfa0b3e2169a94a6b1"
+        usuario_id:
+          type: string
+          example: "68dfc1bfa0b3e2169a94a6b0"
+        mensaje:
+          type: string
+          example: "Tu pedido fue enviado"
+        fecha_alta:
+          type: string
+          format: date-time
+          example: "2025-09-29T19:39:35.239Z"
+        leida:
+          type: boolean
+          example: false
+        fecha_leida:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+
+    ProductoInput:
+      type: object
+      properties:
+        vendedor:
+          type: string
+          example: "68dbd721f8bf5d9695066ce7"
+        titulo:
+          type: string
+          example: "Camiseta de algodón"
+        descripcion:
+          type: string
+          example: "Camiseta 100% algodón, color negro"
+        categorias:
+          type: array
+          items:
+            type: string
+          example: ["ropa", "vestir"]
+        precio:
+          type: number
+          example: 1000
+        moneda:
+          type: string
+          example: "PESO_ARG"
+        stock:
+          type: integer
+          example: 50
+        fotos:
+          type: array
+          items:
+            type: string
+          example: ["foto1.jpg"]
+    Producto:
+      allOf:
+        - $ref: '#/components/schemas/ProductoInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "651234abcd5678ef9012"
+
+    PedidoInput:
+      type: object
+      properties:
+        comprador:
+          type: string
+          example: "68dbd76af8bf5d9695066ceb"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedido'
+        moneda:
+          type: string
+          example: "PESO_ARG"
+        direccion_entrega:
+          $ref: '#/components/schemas/DireccionEntrega'
+    Pedido:
+      allOf:
+        - $ref: '#/components/schemas/PedidoInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "68dc771f76552756c3f5f8cc"
+            total:
+              type: number
+              example: 2500
+            #estado:
+            #  type: string
+            #  example: "PENDIENTE"
+
+    ItemPedido:
+      type: object
+      properties:
+        productoId:
+          type: string
+          example: "68dbd9730d1b092598620812"
+        cantidad:
+          type: integer
+          example: 2
+
+    DireccionEntrega:
+      type: object
+      properties:
+        calle:
+          type: string
+          example: "Av. Siempre Viva"
+        altura:
+          type: integer
+          example: 742
+        piso:
+          type: integer
+          example: 3
+        departamento:
+          type: string
+          example: "B"
+        codigo_postal:
+          type: string
+          example: "1234"
+        ciudad:
+          type: string
+          example: "Springfield"
+        provincia:
+          type: string
+          example: "Buenos Aires"
+        pais:
+          type: string
+          example: "Argentina"
+        latitud:
+          type: number
+          example: -34.6037
+        longitud:
+          type: number
+          example: -58.3816
+
+    CambioEstadoPedidoInput:
+      type: object
+      properties:
+        usuarioId:
+          type: string
+          example: "68ddf7912e522f75405d4a2e"
+        estado:
+          type: string
+          example: "ENVIADO"
+        motivo:
+          type: string
+          example: "El pedido esta disponible"
+    CambioEstadoPedido:
+      type: object
+      properties:
+        comprador:
+          type: string
+          example: "68ddf7912e522f75405d4a2e"
+        pedidoId:
+          type: string
+          example: "68ddf7912e522f75405d4a2e"
+        estado:
+          type: string
+          example: "CANCELADO"
+        historial_estados:
+          type: array
+          items:
+            $ref: '#/components/schemas/EstadoHistorial'
+
+    EstadoHistorial:
+      type: object
+      properties:
+        fecha:
+          type: string
+          format: date-time
+          example: "2025-10-19T16:47:28.274Z"
+        estado:
+          type: string
+          example: "ENTREGADO"
+        motivo:
+          type: string
+          example: "El pedido esta disponible"

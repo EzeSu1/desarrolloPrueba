@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;700;900&display=swap');
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+:root{
+  --primario: #9c2780;
+  --primarioOscuro: #89119D;
+  --secundario: #FFCE00;
+  --secundarioOscuro: rgb(233,287,2);
+  --blanco: #FFFFFF;
+  --negro: #000;
+  --rojo: #db091d;
+
+  --fuentePrincipal: "Staatliches", sans-serif;
+}
