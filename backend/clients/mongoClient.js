@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 
-const uri = 'mongodb://localhost:27017/TiendaSol';
+let uri = '';
+
+if (process.env.NODE_ENV !== 'production' ) {
+    uri = 'mongodb://localhost:27017/TiendaSol';
+} else {
+    uri = process.env.MONGO_URI;
+    console.log(`Usando variables de entorno inyectadas por Render (Producción).`);
+}
+
 
 export function connect() {
     // Retornamos la promesa para poder encadenar .then()
