@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
 import PasswordField from "../components/passwordField";
 import {useUserContext} from "../contexts/userContext";
-
+const API_BASE_URL ="https://mi-tienda-sol.onrender.com" //process.env.BACKEND_PRODUCTION_URI //process.env.REACT_APP_API_URL
 function parseJwt (token) {
     if (!token) { return null; }
     var base64Url = token.split('.')[1];
@@ -26,8 +26,7 @@ const LogIn = () => {
         e.preventDefault()
 
         const data = { user: username, password: password }
-
-        fetch('http://localhost:3000/login', {
+        fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
