@@ -49,8 +49,6 @@ dirección 1:
   "ciudad": "Buenos Aires",
   "provincia": "Buenos Aires",
   "pais": "Argentina",
-  "latitud": -34.603722,
-  "longitud": -58.381592
 }
 
 PEDIDOS DE PRUEBA:
@@ -73,9 +71,7 @@ Pedido 1:
       "codigo_postal": "1234",
       "ciudad": "Springfield",
       "provincia": "Buenos Aires",
-      "pais": "Argentina",
-      "latitud": -34.6037,
-      "longitud": -58.3816
+      "pais": "Argentina"
     }
 }
 

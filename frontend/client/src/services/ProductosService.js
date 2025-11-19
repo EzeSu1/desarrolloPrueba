@@ -102,9 +102,7 @@ export const armarPedido = (userId, cartItems, addressData) => {
         codigo_postal: addressData.codigoPostal,
         ciudad: addressData.ciudad,
         provincia: addressData.provincia,
-        pais: addressData.pais,
-        latitud: addressData.latitud ? Number(addressData.latitud) : undefined,
-        longitud: addressData.longitud ? Number(addressData.longitud) : undefined,
+        pais: addressData.pais
     };
 
 

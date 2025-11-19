@@ -1,42 +1,25 @@
-import dotenv from "dotenv";
-import express from "express";
-import cors from 'cors';
-import router from "./routes/routes.js";
-import {connect} from "./clients/mongoClient.js";
+import dotenv from "dotenv"
+import app from "./app.js"
+import { connect } from "./clients/mongoClient.js"
 
+const envFile = process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 
-const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development"; //
 dotenv.config({ path: envFile });
-const app = express();
-
-app.use(express.json());
-
-app.use(
-    cors({
-        origin: process.env.ALLOWED_ORIGINS
-            ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-            : true
-    }));
-
-
-console.log(`Environment: ${process.env.NODE_ENV}`);
-console.log(`API Base URL: ${process.env.API_BASE_URL}`);
-
-
-
 
 const PORT = process.env.PORT;
-app.use(router);
 
 connect()
     .then(() => {
-      console.info("✅ Conectado a MongoDB");
-      app.listen(PORT, () => {
-        console.log(`API Testing demo running on http://localhost:${PORT}`);
-      });
+        console.info("✅ Conectado a MongoDB");
+        app.listen(PORT, () => {
+            console.log(`API corriendo en http://localhost:${PORT}`);
+        });
     })
     .catch(err => {
-      console.error("❌ No se pudo conectar a MongoDB:", err);
-      process.exit(1); // corta el proceso si no hay DB
+        console.error("❌ No se pudo conectar a MongoDB:", err);
+        process.exit(1);
     });
+
 

@@ -9,14 +9,12 @@ export const directionOrderSchema = new mongoose.Schema({
     codigo_postal: { type: String, required: true },
     ciudad: { type: String, required: true },
     provincia: { type: String, required: true },
-    pais: { type: String, required: true },
-    latitud: { type: Number },
-    longitud: { type: Number }
+    pais: { type: String, required: true }
 }, { _id: false });
 
 
 export class DireccionEntrega {
-    constructor(calle, altura, piso, departamento, codigoPostal, ciudad, provincia, pais, latitud, longitud) {
+    constructor(calle, altura, piso, departamento, codigoPostal, ciudad, provincia, pais) {
         this.calle = calle
         this.altura = altura
         this.piso = piso
@@ -25,7 +23,5 @@ export class DireccionEntrega {
         this.ciudad = ciudad
         this.provincia = provincia
         this.pais = pais
-        this.latitud = latitud
-        this.longitud = longitud
     }
 }

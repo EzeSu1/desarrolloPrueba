@@ -8,7 +8,5 @@ export const direccionEntregaSchema= z.object({
     codigo_postal: z.string(),
     ciudad: z.string(),
     provincia: z.string(),
-    pais: z.string(),
-    latitud: z.number(),
-    longitud: z.number()
+    pais: z.string()
 })

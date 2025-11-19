@@ -35,9 +35,7 @@ const initialAddressState = {
     codigoPostal: '',
     ciudad: '',
     provincia: '',
-    pais: '',
-    latitud: '',
-    longitud: '',
+    pais: ''
 };
 
 const CheckoutProducts = () => {
@@ -161,8 +159,6 @@ const CheckoutProducts = () => {
                             <Grid item xs={12} sm={8}><TextField fullWidth label="Ciudad" name="ciudad" value={addressData.ciudad} onChange={handleChange} required /></Grid>
                             <Grid item xs={12} sm={6}><TextField fullWidth label="Provincia" name="provincia" value={addressData.provincia} onChange={handleChange} required /></Grid>
                             <Grid item xs={12} sm={6}><TextField fullWidth label="País" name="pais" value={addressData.pais} onChange={handleChange} required /></Grid>
-                            <Grid item xs={12} sm={6}><TextField fullWidth label="Latitud" name="latitud" value={addressData.latitud} onChange={handleChange} type="number" /></Grid>
-                            <Grid item xs={12} sm={6}><TextField fullWidth label="Longitud" name="longitud" value={addressData.longitud} onChange={handleChange} type="number" /></Grid>
                             <Grid item xs={12}>
                                 <Button type="submit" variant="contained" color={isAddressSaved ? "success" : "primary"} fullWidth sx={{ mt: 1, mb: 3 }}>
                                     {isAddressSaved ? 'Dirección Confirmada' : 'Confirmar Dirección'}

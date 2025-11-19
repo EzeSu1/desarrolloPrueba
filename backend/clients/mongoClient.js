@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 
-
 const uri = 'mongodb+srv://tiendaSol:tiendaSol@tiendasol.ojfr7hy.mongodb.net/TiendaSol?retryWrites=true&w=majority'//'mongodb://localhost:27017/TiendaSol';
-
-
 
 export function connect() {
     // Retornamos la promesa para poder encadenar .then()
