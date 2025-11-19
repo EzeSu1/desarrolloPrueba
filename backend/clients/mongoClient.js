@@ -1,13 +1,8 @@
 import mongoose from "mongoose";
 
-let uri = '';
 
-if (process.env.NODE_ENV !== 'production' ) {
-    uri = 'mongodb://localhost:27017/TiendaSol';
-} else {
-    uri = process.env.MONGO_URI;
-    console.log(`Usando variables de entorno inyectadas por Render (Producción).`);
-}
+const uri = 'mongodb+srv://tiendaSol:tiendaSol@tiendasol.ojfr7hy.mongodb.net/?appName=TiendaSol'//'mongodb://localhost:27017/TiendaSol';
+
 
 
 export function connect() {
